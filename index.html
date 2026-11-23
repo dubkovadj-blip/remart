@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="ru" data-c="lime">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ремарт - инжиниринг полного цикла</title>
+<meta name="description" content="Проектируем и производим промышленное оборудование особого назначения: промышленный инжиниринг, крановое оборудование, огнеупорные материалы, металлообработка.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..500&display=swap" rel="stylesheet">
+<script>const c = new URLSearchParams(location.search).get('c'); if (c === 'dark') document.documentElement.dataset.c = c; if (c === 'blue') delete document.documentElement.dataset.c;</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.css">
+<style>
+/* Основной акцент сайта: фирменный салатовый #B9CF3D (data-c="lime" на html). ?c=blue показывает прежний синий, ?c=dark графит. */
+:root{
+  --bg:#F6F6F6; --w:#FFFFFF; --ink:#111111; --ink2:#444746; --ink3:#8B8E8C;
+  --line:rgba(17,17,17,.12); --lineW:rgba(255,255,255,.2);
+  --acc:#064FBC; --accH:#0543A0; --accD:#064FBC; --accDT:#FFFFFF;
+  --pad:clamp(20px,3.2vw,56px); --sec:clamp(72px,7vw,120px);
+  --out:cubic-bezier(.2,.7,.1,1); --ease:cubic-bezier(.65,0,.2,1);
+}
+html[data-c="dark"]{--acc:#16181A;--accH:#000;--accD:#FFFFFF;--accDT:#111111}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11" 1}
+h1,h2,h3,h4,p{margin:0;font-weight:500}
+ul{margin:0;padding:0;list-style:none}
+a{color:inherit;text-decoration:none}
+button,input,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer}
+img,video{display:block}
+
+/* ---------- текст ---------- */
+.lbl{font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;line-height:1.35}
+.lbl.a{color:var(--acc)}
+.h1{font-size:clamp(40px,4.3vw,74px);line-height:1.08;letter-spacing:-.035em}
+.h2{font-size:clamp(32px,3.05vw,52px);line-height:1.12;letter-spacing:-.03em}
+.h3{font-size:clamp(24px,2.1vw,36px);line-height:1.22;letter-spacing:-.025em}
+.p{font-size:16px;line-height:1.5;color:var(--ink2);max-width:40ch}
+.acc{color:var(--acc)}
+html[data-c="dark"] .acc{color:var(--ink3)}
+
+/* ---------- кнопки ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;height:48px;padding:0 22px;background:var(--acc);color:#fff;font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;transition:background .25s,color .25s}
+.btn:hover{background:var(--accH)}
+.btn.w{background:#fff;color:var(--ink)}
+.btn.w:hover{background:#EDEDED}
+.dk .btn:not(.w){background:var(--accD);color:var(--accDT)}
+.sq{flex:none;width:36px;height:36px;display:grid;place-items:center;background:var(--acc);color:#fff;font-size:15px;transition:background .25s}
+a:hover>.sq,a:hover .sq,.sq:hover{background:var(--accH)}
+/* ховер кнопок: текст уезжает вверх, снизу приходит такой же */
+.rl{position:relative;display:block;overflow:hidden;line-height:1.4}
+.rl>span{display:flex;align-items:center;justify-content:center;gap:12px;transition:transform .5s var(--ease)}
+.rl>span+span{position:absolute;left:0;right:0;top:100%}
+a:focus-visible .rl>span{transform:translateY(-100%)}
+@media (hover:hover){a:hover .rl>span{transform:translateY(-100%)}}
+@media (prefers-reduced-motion:reduce){.rl>span{transition:none}}
+
+/* появление при прокрутке */
+@supports (animation-timeline: view()){
+  .rv{animation:rv linear both;animation-timeline:view();animation-range:entry 0% entry 38%}
+  @keyframes rv{from{opacity:0;translate:0 24px}to{opacity:1;translate:0 0}}
+}
+
+/* =========================================================
+   ИНЖЕНЕРНЫЙ ДЕКОР: линейки с делениями и размерные линии
+   ========================================================= */
+:root{--tk:rgba(17,17,17,.2);--hh:84px}
+html{scroll-padding-top:var(--hh)}
+.dk{--tk:rgba(255,255,255,.32)}
+body{position:relative}
+/* две вертикальные линейки по краям страницы */
+.rail{position:absolute;top:0;bottom:0;width:7px;z-index:1;pointer-events:none;left:calc(var(--pad) / 2);
+  background:linear-gradient(var(--tk),var(--tk)) top left/1px 100% no-repeat,
+    repeating-linear-gradient(180deg,var(--tk) 0 1px,transparent 1px 12px) top left/4px 100% no-repeat,
+    repeating-linear-gradient(180deg,var(--tk) 0 1px,transparent 1px 60px) top left/7px 100% no-repeat}
+.rail.r{left:auto;right:calc(var(--pad) / 2);transform:scaleX(-1)}
+.hero,.pr,.ct,.ft{position:relative;z-index:2}
+/* горизонтальная линейка на верхней границе блока */
+.sec{position:relative;--sbg:var(--bg)}
+.sec.w{--sbg:var(--w)}
+.sec::before,.pr::before,.ct::before{content:"";position:absolute;left:0;right:0;top:0;height:7px;z-index:3;pointer-events:none;
+  background:linear-gradient(var(--tk),var(--tk)) top left/100% 1px no-repeat,
+    repeating-linear-gradient(90deg,var(--tk) 0 1px,transparent 1px 12px) top left/100% 4px no-repeat,
+    repeating-linear-gradient(90deg,var(--tk) 0 1px,transparent 1px 60px) top left/100% 7px no-repeat}
+@media (max-width:760px){.rail{display:none}}
+
+/* =========================================================
+   ШАПКА
+   ========================================================= */
+/* шапка-остров (вариант 08): логотип, меню и телефон в одной плавающей плашке с отступами от краёв */
+:root{--ht:14px;--ih:calc(var(--hh) - 12px)}
+.hdr{position:fixed;left:var(--pad);right:var(--pad);top:var(--ht);z-index:60;height:var(--ih);display:flex;align-items:center;gap:2px;padding:0 8px 0 20px;border-radius:8px;color:#fff;background:rgba(255,255,255,.15);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:color .25s,background .3s,box-shadow .3s}
+.hdr.glass{background:rgba(30,32,34,.5)}
+.hdr.solid{color:var(--ink);background:rgba(244,244,242,.9);box-shadow:0 0 0 1px rgba(17,17,17,.06)}
+.hdr .logo{display:flex;align-items:center;flex:none;margin-right:auto}
+.hdr .logo img{height:38px;width:auto}
+.hdr nav{display:flex;align-items:center;gap:2px}
+.hdr nav a{display:flex;align-items:center;height:calc(var(--ih) - 16px);padding:0 20px;border-radius:4px;font-size:16px;font-weight:400;line-height:1.15;white-space:nowrap}
+.hdr .tel{display:flex;align-items:center;height:calc(var(--ih) - 16px);margin-left:10px;padding:0 20px;background:var(--acc);color:var(--ink);font-size:15px;font-weight:500;white-space:nowrap}
+.hdr .tel svg{flex:none;width:16px;height:16px;margin-right:9px;stroke-width:1.8;color:currentColor}
+.burger{display:none;flex:none;width:46px;height:46px;margin-left:4px;align-items:center;justify-content:center;flex-direction:column;gap:5px;border-radius:4px;background:none}
+.burger s{width:20px;height:1.5px;background:currentColor}
+.mnav{position:fixed;left:var(--pad);right:var(--pad);top:calc(var(--ht) + var(--ih) + 6px);z-index:59;padding:6px 20px 20px;border-radius:8px;background:#fff;box-shadow:0 0 0 1px rgba(17,17,17,.06),0 20px 40px rgba(0,0,0,.18);opacity:0;transform:translateY(-12px);visibility:hidden;transition:transform .4s var(--out),opacity .25s,visibility 0s .4s}
+.mnav.open{opacity:1;transform:none;visibility:visible;transition-delay:0s}
+@media (min-width:901px){.mnav{display:none}}
+.mnav a{display:block;padding:14px 0;border-bottom:1px solid var(--line);font-size:17px;font-weight:500;letter-spacing:-.02em}
+.mnav .btn{display:flex;margin-top:18px;border:0;color:#fff}
+@media (max-width:1420px){.hdr nav a{padding:0 14px;font-size:15px}.hdr .tel{padding:0 16px;font-size:14px}}
+@media (max-width:1100px){.hdr nav a{padding:0 10px;font-size:14px}.hdr .logo img{height:34px}}
+@media (max-width:900px){.hdr nav{display:none}.burger{display:flex}}
+@media (max-width:680px){:root{--hh:68px;--ht:10px}.hdr{left:10px;right:10px;padding:0 6px 0 14px}.hdr .logo img{height:32px}.hdr .tel{height:40px;padding:0 12px;font-size:13px}.hdr .tel svg{display:none}.burger{width:40px;height:40px}.mnav{left:10px;right:10px}}
+
+/* =========================================================
+   01. ПЕРВЫЙ ЭКРАН
+   ========================================================= */
+.hero{position:relative;height:100svh;min-height:680px;overflow:hidden;background:#17191a;color:#fff;display:flex;flex-direction:column;justify-content:flex-end}
+.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.75)}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,14,16,.68) 0%,rgba(12,14,16,.6) 8%,rgba(12,14,16,.34) 16%,rgba(12,14,16,.2) 28%,rgba(12,14,16,.74) 62%,rgba(12,14,16,.93) 100%)}
+.hero .stage{position:relative;z-index:3;display:grid;grid-template-columns:minmax(0,1fr) clamp(260px,23vw,360px);column-gap:clamp(24px,4vw,72px);align-items:end;padding:0 var(--pad);margin-bottom:clamp(28px,5vh,52px)}
+.hero .stack{display:grid}
+.hero .stack>*{grid-area:1/1;visibility:hidden}
+.hero .stack>.on,.hero .stack>.out{visibility:visible}
+.hero .hs .lbl{display:none;margin-bottom:14px}
+.hero .hs .big{font-size:clamp(44px,min(6.6vw,13vh),124px);line-height:1.02;letter-spacing:-.045em}
+/* строка заголовка выезжает из-под маски; первый слайд виден сразу, без анимации */
+.hero .ln{display:block;overflow:hidden;padding-bottom:.14em;margin-bottom:-.14em}
+.hero .ln>span{display:block}
+.hero .hs.in .ln>span{animation:lnIn .9s var(--out) .22s both}
+.hero .hs.in .ln+.ln>span{animation-delay:.3s}
+.hero .hs.out .ln>span{animation:lnOut .3s var(--ease) both}
+@keyframes lnIn{from{transform:translateY(108%)}to{transform:none}}
+@keyframes lnOut{to{transform:translateY(-108%)}}
+.hero .ps p{font-size:clamp(16px,1.2vw,19px);line-height:1.45;max-width:36ch}
+.hero .ps p.in{animation:fadeIn .6s ease .3s both}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.hero .more{display:inline-block;margin-top:18px;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,.55);font-size:15px;font-weight:500;transition:border-color .25s}
+.hero .more:hover{border-color:#fff}
+.hero .mcall{display:none}
+/* линейка внизу: четыре участка шкалы = четыре направления, деления заполняются по ходу слайда */
+.hero .scale{position:relative;z-index:3;display:grid;grid-template-columns:repeat(4,1fr);margin:0 var(--pad);--t:rgba(255,255,255,.42);--f:#fff}
+.hero .scale::before,.hero .scale .run{content:"";position:absolute;left:0;right:0;top:0;height:13px;pointer-events:none;
+  background:linear-gradient(var(--c),var(--c)) top left/100% 1px no-repeat,
+    repeating-linear-gradient(90deg,var(--c) 0 1px,transparent 1px 12px) top left/100% 6px no-repeat,
+    repeating-linear-gradient(90deg,var(--c) 0 1px,transparent 1px 60px) top left/100% 13px no-repeat}
+.hero .scale::before{--c:var(--t)}
+.hero .scale .run{--c:var(--f);clip-path:inset(0 calc(75% - var(--i,0) * 25%) 0 calc(var(--i,0) * 25%));animation:measure 7s linear forwards}
+@keyframes measure{from{clip-path:inset(0 calc(100% - var(--i,0) * 25%) 0 calc(var(--i,0) * 25%))}}
+.hero .scale:hover .run,.hero .scale:focus-within .run{animation-play-state:paused}
+.hero .tab{display:flex;align-items:baseline;gap:14px;padding:30px 16px clamp(22px,3.4vh,34px) 0;text-align:left;font-size:clamp(14px,1.08vw,17px);font-weight:500;letter-spacing:-.01em;line-height:1.25;color:rgba(255,255,255,.72);transition:color .25s}
+.hero .tab b{font-weight:500;font-size:13px;letter-spacing:.04em}
+.hero .tab:hover,.hero .tab.on{color:#fff}
+.hero .tab:focus-visible{outline:1px solid #fff;outline-offset:-1px}
+@media (prefers-reduced-motion:reduce){.hero .scale .run{animation:none}.hero .hs.in .ln>span,.hero .hs.out .ln>span,.hero .ps p.in{animation:none}}
+@media (max-width:1000px){.hero .stage{grid-template-columns:minmax(0,1fr);row-gap:20px}.hero .hs .big{font-size:clamp(34px,8.6vw,80px)}}
+@media (max-width:680px){
+  .hero .hs .lbl{display:block}
+  .hero .hs .big{font-size:9vw}
+  .hero .mcall{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;margin-top:22px}
+  .hero .mcall a:first-child{font-size:19px;font-weight:500;letter-spacing:-.01em}
+  .hero .tab{padding:22px 0 20px}
+  .hero .tab span{display:none}
+}
+
+/* ---------- общая шапка блока ---------- */
+.sec{padding:var(--sec) var(--pad)}
+.sec.w{background:var(--w)}
+.shead{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin-bottom:clamp(40px,4.4vw,72px)}
+.shead .lbl{display:block;margin-bottom:22px}
+.shead .h2{max-width:15ch}
+@media (max-width:700px){.shead{flex-direction:column;align-items:flex-start}}
+
+/* =========================================================
+   02. ЧЕТЫРЕ НАПРАВЛЕНИЯ
+   ========================================================= */
+.eq{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);margin:0 calc(var(--pad) * -1);overflow-x:clip}
+.eq a{display:flex;flex-direction:column;gap:28px;padding:clamp(22px,2.2vw,36px) var(--pad) clamp(28px,2.6vw,44px);border-bottom:1px solid var(--line)}
+.eq a:nth-child(odd){border-right:1px solid var(--line)}
+.eq .top{display:flex;justify-content:space-between;gap:24px}
+.eq .specs{text-align:right;font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;line-height:1.8}
+.eq .specs i{font-style:normal;color:var(--ink3)}
+.eq .pic{position:relative;aspect-ratio:16/9;overflow:hidden;background:#141617}
+.eq .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--out)}
+/* объект без фона на белой ячейке, как у референса */
+.eq .pic.cut{background:none;overflow:visible}
+.eq .pic.cut img{object-fit:contain;transform:scale(.74);filter:drop-shadow(0 22px 22px rgba(0,0,0,.1))}
+.eq .pic.cut::after{content:"";position:absolute;left:36%;right:36%;bottom:7%;height:6%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.16),rgba(0,0,0,0));filter:blur(8px)}
+.eq .bot{display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+.eq .bot p{font-size:16px;color:var(--ink2);max-width:34ch}
+@media (max-width:860px){.eq .pic.cut img{transform:scale(.88)}.eq .pic.cut::after{bottom:0}.eq{grid-template-columns:1fr}.eq a:nth-child(odd){border-right:0}}
+
+/* =========================================================
+   03. ПОКАЗАТЕЛИ: крюк и выноски
+   ========================================================= */
+/* один экран, ровный графит, как у остальных тёмных блоков (20.11): подвеска по центру, слева заголовок и две цифры, справа три */
+.fg{position:relative;overflow:hidden;padding:var(--sec) var(--pad);background:#121416;color:#fff}
+.fg .hook{position:absolute;z-index:0;left:50%;top:0;height:calc(100% - var(--sec));width:auto;max-width:44vw;translate:-50% 0;object-fit:contain;object-position:50% 0;pointer-events:none}
+.fg .grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,1fr);gap:12px}
+.fg .head{grid-area:1/1;align-self:start}
+.fg .head .lbl{display:block;margin-bottom:22px}
+.fg .p15{grid-area:2/1}.fg .p12{grid-area:3/1}.fg .p1000{grid-area:1/3}.fg .p250{grid-area:2/3}.fg .p50{grid-area:3/3}
+.fg .pl{display:flex;flex-direction:column;justify-content:space-between;gap:28px;min-height:clamp(170px,12.5vw,220px);padding:clamp(18px,1.6vw,26px);border:1px solid rgba(255,255,255,.14);background:rgba(18,20,22,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.fg .pl b{display:block;font-size:clamp(48px,4.6vw,80px);font-weight:500;line-height:.95;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.fg .pl span{display:block;max-width:17ch;font-size:16px;line-height:1.3;color:rgba(255,255,255,.7)}
+.fg .pl.lime b{color:var(--acc)}
+/* появление: плашки мягко проявляются, цифры набегают; без JS всё видно сразу */
+.fg.ani .pl{opacity:0;translate:0 18px;transition:opacity .6s ease,translate .8s var(--out);transition-delay:calc(var(--k,0) * 90ms)}
+.fg.ani.in .pl{opacity:1;translate:0 0}
+@media (max-width:999px){
+  .fg .hook{position:relative;left:auto;translate:none;display:block;height:auto;width:min(64vw,340px);max-width:none;margin:calc(var(--sec) * -1) auto 32px}
+  .fg .grid{grid-template-columns:1fr 1fr}
+  .fg .head{grid-column:1/-1;grid-row:auto;margin-bottom:12px}
+  .fg .p15,.fg .p12,.fg .p1000,.fg .p250{grid-area:auto}.fg .p50{grid-area:auto;grid-column:1/-1}
+}
+@media (prefers-reduced-motion:reduce){.fg.ani .pl{opacity:1;translate:none;transition:none}}
+
+/* =========================================================
+   04. ПРИОРИТЕТНЫЕ ПРОЕКТЫ
+   ========================================================= */
+.pj{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,1.8vw,28px)}
+.pj .im{position:relative;aspect-ratio:4/3;overflow:hidden;background:#ddd}
+.pj .im img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--out)}
+.pj a:hover .im img{transform:scale(1.05)}
+.pj .lbl{display:block;margin-top:22px;color:var(--ink3)}
+.pj h3{margin-top:10px;font-size:clamp(20px,1.45vw,24px);line-height:1.25;letter-spacing:-.02em;max-width:22ch}
+.pj p{margin-top:10px;font-size:15px;color:var(--ink2);max-width:40ch}
+@media (max-width:900px){.pj{grid-template-columns:1fr}}
+
+/* =========================================================
+   05. КРАТКО О КОМПАНИИ
+   ========================================================= */
+.ab{display:grid;grid-template-columns:repeat(12,1fr);column-gap:clamp(16px,1.8vw,28px);row-gap:clamp(40px,4.4vw,72px)}
+.ab>.lbl{grid-column:1/4;padding-top:10px}
+.ab .stm{grid-column:4/11}
+.ab .c1{grid-column:1/4;display:flex;flex-direction:column;justify-content:space-between;gap:24px}
+.ab .c1 .im{aspect-ratio:3/4}
+.ab .c2{grid-column:4/10}
+.ab .c2 .im{height:100%;min-height:420px}
+.ab .c3{grid-column:10/13;display:flex;flex-direction:column;justify-content:space-between;gap:24px}
+.ab .c3 .im{aspect-ratio:1}
+.ab .im{position:relative;overflow:hidden;background:#1b1d1e}
+.ab .im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ab .c3 .lnk{align-self:flex-start}
+@media (max-width:1000px){.ab>.lbl,.ab .stm,.ab .c1,.ab .c2,.ab .c3{grid-column:1/-1}.ab .c1 .im{aspect-ratio:16/10}.ab .c3 .im{aspect-ratio:16/10}}
+
+/* =========================================================
+   06. ПРОИЗВОДСТВЕННЫЕ ВОЗМОЖНОСТИ
+   ========================================================= */
+/* слева всё стоит на месте, пока справа идёт шкала */
+
+/* =========================================================
+   07. КРАНОВОЕ ОБОРУДОВАНИЕ
+   ========================================================= */
+/* симметричная композиция вокруг объекта */
+.cr{display:flex;flex-direction:column;align-items:center;text-align:center}
+.cr .lbl{display:block;margin-bottom:22px}
+.cr .h2{max-width:24ch}
+.cr .ob{width:min(100%,clamp(420px,46vw,720px));aspect-ratio:1.5;margin-top:clamp(8px,1vw,20px);object-fit:contain}
+.cr .row{position:relative;align-self:stretch;display:grid;grid-template-columns:repeat(3,1fr);margin:clamp(20px,2vw,32px) calc(var(--pad) * -1) 0;padding:0 var(--pad)}
+.cr .row::before{content:"";position:absolute;left:0;right:0;top:0;height:7px;pointer-events:none;
+  background:linear-gradient(var(--tk),var(--tk)) top left/100% 1px no-repeat,
+    repeating-linear-gradient(90deg,var(--tk) 0 1px,transparent 1px 12px) top left/100% 4px no-repeat,
+    repeating-linear-gradient(90deg,var(--tk) 0 1px,transparent 1px 60px) top left/100% 7px no-repeat}
+.cr .it{display:flex;flex-direction:column;align-items:center;gap:12px;padding:clamp(36px,3.6vw,56px) 24px 0;border-right:1px solid var(--line)}
+.cr .it:last-child{border-right:0}
+.cr .it h3{font-size:clamp(26px,2.3vw,38px);line-height:1.12;letter-spacing:-.03em;transition:color .25s}
+.cr .it:hover h3{color:var(--acc)}
+.cr .it .p{max-width:28ch;min-height:3em}
+.cr .it .more{font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--acc)}
+html[data-c="dark"] .cr .it .more,html[data-c="dark"] .cr .it:hover h3{color:var(--ink)}
+.cr>.lnk{margin-top:clamp(44px,4.4vw,68px);align-self:center}
+@media (max-width:760px){.cr .row{grid-template-columns:1fr}.cr .it{border-right:0;border-bottom:1px solid var(--line);padding:28px 0}.cr .it .p{min-height:0}}
+
+/* =========================================================
+   08. ОГНЕУПОРНЫЕ МАТЕРИАЛЫ
+   ========================================================= */
+.rf{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 calc(var(--pad) * -1)}
+.rf .it{padding:clamp(20px,2vw,32px) clamp(16px,1.8vw,28px) clamp(26px,2.4vw,40px);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:22px}
+.rf .it:first-child{padding-left:var(--pad)}
+.rf .it:last-child{border-right:0;padding-right:var(--pad)}
+.rf .top{display:flex;justify-content:space-between;gap:12px}
+.rf .top i{font-style:normal;color:var(--ink3)}
+.rf .pic{position:relative;aspect-ratio:1;overflow:hidden;background:#141617}
+.rf .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--out)}
+.rf .it:hover .pic img{transform:scale(1.06)}
+.rf p{font-size:15px;color:var(--ink2);max-width:28ch}
+@media (max-width:1000px){.rf{grid-template-columns:1fr 1fr}.rf .it:nth-child(2){border-right:0}.rf .it:nth-child(-n+2){border-bottom:1px solid var(--line)}.rf .it{padding-left:var(--pad)!important;padding-right:var(--pad)!important}}
+@media (max-width:560px){.rf{grid-template-columns:1fr}.rf .it{border-right:0;border-bottom:1px solid var(--line)}}
+
+/* =========================================================
+   09. ПАРТНЁРЫ
+   ========================================================= */
+/* тёмный блок: подпись сверху, ниже бегущая строка с логотипами */
+.sec.pts{position:relative;z-index:2;padding:var(--sec) 0;background:#121416;color:#fff}
+.pts .hd{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding:0 var(--pad);margin-bottom:clamp(36px,3.6vw,60px)}
+html[data-c] .pts .lbl.a,.pts .lbl.a{color:#fff}
+.pts .hd p{font-size:16px;line-height:1.45;max-width:34ch;color:rgba(255,255,255,.62)}
+/* бегущая строка логотипов, как у референса: рамки 542×356 на 1710, шаг 14px, ~43px/с */
+.mq{overflow:hidden}
+.mq ul{display:flex;width:max-content;animation:mq 78s linear infinite}
+.mq li{flex:none;display:grid;place-items:center;width:clamp(240px,31.7vw,600px);aspect-ratio:542/356;margin-right:clamp(10px,.82vw,14px);border:1px solid rgba(255,255,255,.14);border-radius:3px}
+.mq li img{display:block;width:min(var(--w),42%);height:auto}
+@keyframes mq{to{transform:translateX(-50%)}}
+@media (max-width:760px){.pts .hd{flex-direction:column;align-items:flex-start}.mq li{width:72vw}.mq ul{animation-duration:39s}}
+@media (prefers-reduced-motion:reduce){.mq{overflow-x:auto}.mq ul{animation:none}}
+
+/* =========================================================
+   10. КОНТАКТНЫЙ БЛОК
+   ========================================================= */
+.ct{position:relative;color:#fff;overflow:hidden;background:#17191a}
+.ct>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.7)}
+.ct::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,14,16,.82) 0%,rgba(12,14,16,.6) 55%,rgba(12,14,16,.45))}
+.ct .in{position:relative;z-index:2;display:grid;grid-template-columns:repeat(12,1fr);column-gap:clamp(16px,1.8vw,28px);align-items:end;padding:var(--sec) var(--pad)}
+.ct .l{grid-column:1/7;display:flex;flex-direction:column;align-items:flex-start}
+.ct .l .lbl{opacity:.8}
+.ct .l .h2{margin-top:22px;max-width:14ch}
+.ct .tel{margin-top:36px;font-size:clamp(32px,3.2vw,54px);letter-spacing:-.035em;font-weight:500;line-height:1}
+.ct .l .btn{margin-top:28px}
+.ct .rows{margin-top:auto;padding-top:48px;display:flex;gap:56px}
+.ct .rows svg{display:block;width:24px;height:24px;stroke-width:1.2;margin-bottom:14px;opacity:.9}
+.ct .rows b{display:block;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;opacity:.65;margin-bottom:6px}
+.form{grid-column:8/13;background:#fff;color:var(--ink);padding:clamp(22px,2.2vw,34px);align-self:start}
+.form .fr{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.form label{display:block;padding:14px 0 10px;border-bottom:1px solid var(--line)}
+.form label b{display:block;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.form input,.form textarea{width:100%;border:0;outline:0;background:none;font-size:15px;padding:2px 0;resize:none}
+.form ::placeholder{color:#A9ACAA}
+.form .file{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:16px 0;cursor:pointer;font-size:15px}
+.form .file svg{flex:none;width:20px;height:20px;stroke-width:1.4}
+.form .file i{font-style:normal;color:var(--ink3)}
+.form .btn{margin-top:24px}
+@media (max-width:1000px){.ct .l,.form{grid-column:1/-1}.form{margin-top:48px}.ct .rows{flex-direction:column;gap:20px}}
+
+.ct .info{grid-column:8/13;border-top:1px solid var(--lineW)}
+.ct .info li{display:flex;align-items:center;gap:22px;padding:26px 0;border-bottom:1px solid var(--lineW)}
+.ct .info svg{flex:none;width:28px;height:28px;stroke-width:1.1;opacity:.9}
+.ct .info b{display:block;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;opacity:.65;margin-bottom:6px}
+.ct .info span{font-size:clamp(18px,1.5vw,24px);font-weight:500;letter-spacing:-.02em}
+@media (max-width:1000px){.ct .info{grid-column:1/-1;margin-top:48px}}
+
+/* =========================================================
+   11. ПОДВАЛ
+   ========================================================= */
+.ft{background:var(--acc);color:#fff;overflow:hidden}
+.ft .word{font-size:23.4vw;line-height:.8;letter-spacing:-.07em;font-weight:500;white-space:nowrap;text-align:center;padding:calc(var(--sec) - .95vw) 0 0;transform:translateX(-.0565em);user-select:none}
+.ft .cols{display:grid;grid-template-columns:repeat(12,1fr);column-gap:clamp(16px,1.8vw,28px);margin:3.4vw var(--pad) 0;padding:clamp(36px,3.4vw,56px) 0;border-top:1px solid var(--lineW)}
+.ft .cols>div:nth-child(1){grid-column:1/4}
+.ft .cols>div:nth-child(2){grid-column:4/6;border-left:1px solid var(--lineW);padding-left:24px}
+.ft .cols>div:nth-child(3){grid-column:6/9}
+.ft .cols>div:nth-child(4){grid-column:9/11;border-left:1px solid var(--lineW);padding-left:24px}
+.ft .cols>div:nth-child(5){grid-column:11/13;text-align:right;border-left:1px solid var(--lineW)}
+.ft .big{font-size:clamp(22px,1.75vw,28px);letter-spacing:-.025em;line-height:1.2;max-width:15ch}
+.ft h4{margin:0 0 16px;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;opacity:.7}
+.ft li{padding:4px 0;font-size:15px}
+.ft li a:hover{opacity:.7}
+.ft .legal{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 var(--pad);padding:20px 0;border-top:1px solid var(--lineW);font-size:12px;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+@media (max-width:900px){.ft .cols>div{grid-column:1/-1!important;text-align:left!important;border:0!important;padding-left:0!important;margin-bottom:28px}}
+
+/* =========================================================
+   ОСНОВНАЯ ТЕМА: фирменный салатовый.
+   На салатовом текст тёмный, белый на нём не читается.
+   ========================================================= */
+html[data-c="lime"]{--acc:#B9CF3D;--accH:#A9BF2E;--accD:#B9CF3D;--accDT:#111111}
+html[data-c="lime"] .btn,html[data-c="lime"] .sq,html[data-c="lime"] .mnav .btn{color:var(--ink)}
+html[data-c="lime"] .dk .btn.w{background:var(--acc);color:var(--ink)}
+html[data-c="lime"] .dk .btn.w:hover{background:var(--accH)}
+/* салатовый текст на светлом фоне не читается: подписи с квадратом, акцент в заголовке маркером */
+html[data-c="lime"] .lbl.a{color:var(--ink)}
+html[data-c="lime"] .lbl.a::before{content:"";display:inline-block;width:9px;height:9px;margin-right:9px;background:var(--acc)}
+/* заголовки без лаймового маркера (Даша, 19.11) */
+html[data-c="lime"] .acc{color:inherit;background:none;padding:0;margin:0}
+html[data-c="lime"] .cr .it .more{color:var(--ink);padding-bottom:3px;border-bottom:2px solid var(--acc)}
+html[data-c="lime"] .cr .it:hover h3{color:var(--ink)}
+/* шкалы на тёмных блоках */
+html[data-c="lime"] .hero .scale{--f:#B9CF3D}
+html[data-c="lime"] .hero .more{border-color:var(--acc)}
+/* подвал */
+html[data-c="lime"] .ft{color:var(--ink);--lineW:rgba(17,17,17,.24)}
+
+/* подзаголовки блоков и текст о компании */
+.ld{margin-top:20px;font-size:clamp(18px,1.35vw,21px);line-height:1.4;font-weight:400;color:var(--ink2);max-width:56ch}
+.ab .tx{grid-column:4/13;display:grid;grid-template-columns:1fr 1fr;column-gap:clamp(24px,3vw,56px)}
+.ab .tx p{font-size:clamp(17px,1.25vw,19px);line-height:1.5;font-weight:400;color:var(--ink2);max-width:50ch}
+@media (max-width:1200px){.pj{grid-template-columns:1fr 1fr}}
+@media (max-width:900px){.ab .tx{grid-column:1/-1;grid-template-columns:1fr;row-gap:16px}}
+@media (max-width:680px){.pj{grid-template-columns:1fr}html[data-c="lime"] .hdr .tel{color:var(--ink)}}
+
+/* =========================================================
+   ПЕРЕЛИСТЫВАНИЕ: блок останавливается, следующий наезжает сверху
+   ========================================================= */
+.sec{background:var(--bg)}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+html.stk body>section,html.stk body>footer{position:sticky!important;top:var(--st,0px);z-index:var(--z,2)!important}
+html.stk body>.nostk{position:relative!important;top:auto!important}
+/* затемнения при перелистывании нет: блоки остаются чистыми (Даша, 20.11) */
+html.stk .hero>video{transform:scale(calc(1 + var(--p,0) * .06));transform-origin:50% 60%}
+
+/* =========================================================
+   ЧИСТОВАЯ ВЁРСТКА
+   ========================================================= */
+.h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+.shead .h2{max-width:24ch}
+.ct .l .h2{max-width:16ch}
+/* крупные цифры и заголовки стоят по одной линии с мелким текстом */
+.hero .hs .big{margin-left:-.04em}
+.hero .hs.out .lbl{visibility:hidden}
+.hero .ps p{align-self:end}
+@media (max-width:560px){.eq .top{flex-direction:column;gap:10px}.eq .specs{text-align:left}}
+.ct .tel{letter-spacing:-.02em;white-space:nowrap}
+/* 02 */
+.eq .top{align-items:baseline}
+.eq a:nth-child(even){border-right:1px solid transparent}
+.eq .bot p{max-width:38ch;min-height:3em}
+.eq .pic.cut::after{content:none}
+/* 03 */
+/* 03: подпись на чёрном фоне */
+html[data-c="lime"] .fg .lbl.a,.fg .head .lbl.a{color:#fff}
+/* 04: подписи, заголовки и описания карточек идут по общим линиям */
+/* 06: значки по правому краю сетки */
+/* 07 */
+.cr .it{padding-bottom:clamp(8px,1vw,16px)}
+.cr .it .p{min-height:0}
+/* 08: четыре фото одного размера */
+.rf p{min-height:4.5em}
+@media (min-width:1001px){
+  .rf{--g:clamp(16px,1.8vw,28px);--c:calc((100% - var(--pad) * 2 - var(--g) * 6) / 4);grid-template-columns:calc(var(--c) + var(--pad) + var(--g)) calc(var(--c) + var(--g) * 2) calc(var(--c) + var(--g) * 2) calc(var(--c) + var(--pad) + var(--g))}
+  .rf .it:last-child{border-right:1px solid transparent}
+}
+/* 09: последний логотип по центру своей колонки внутри полей */
+/* 11: первая строка всех колонок на одной высоте */
+
+/* телефон: зона нажатия у ссылок не меньше 44px */
+@media (max-width:900px){
+  .hdr .tel,.hero .more,.ct .info a{position:relative}
+  .hdr .tel::after,.hero .more::after,.ct .info a::after{content:"";position:absolute;left:0;right:0;top:50%;height:48px;transform:translateY(-50%)}
+  .hero .mcall a:first-child{display:inline-flex;align-items:center;min-height:48px}
+  .ct .tel{display:inline-flex;align-items:center;min-height:48px;margin-top:28px}
+  .ct .l .btn{margin-top:20px}
+  .ft h4{margin-bottom:6px}
+  .ft .cols li{display:flex;align-items:center;min-height:44px;padding:0}
+  .ft .cols li a{display:flex;align-items:center;min-height:44px;width:100%}
+  .ft .cols>div{margin-bottom:18px!important}
+  .ft .legal{row-gap:0;padding-bottom:8px}
+  .ft .legal a{display:inline-flex;align-items:center;min-height:44px}
+}
+
+/* =========================================================
+   ПЕРВЫЙ ЭКРАН: подпись сверху, крупный заголовок снизу, справа колонка с линией
+   ========================================================= */
+.hero video{filter:saturate(.6) brightness(.72)}
+.hero::after{background:linear-gradient(180deg,rgba(8,9,10,.7) 0%,rgba(8,9,10,.5) 14%,rgba(8,9,10,.46) 44%,rgba(8,9,10,.82) 72%,rgba(8,9,10,.96) 100%)}
+.hero .stage{grid-template-columns:minmax(0,1fr) clamp(280px,24vw,420px);column-gap:clamp(24px,3vw,56px);align-items:stretch;height:clamp(250px,36vh,410px);margin-bottom:clamp(24px,4vh,44px)}
+.hero .hs{display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.hero .hs .lbl{display:flex;align-items:center;gap:10px;margin:0;color:rgba(255,255,255,.84)}
+.hero .hs .lbl::before{content:"";flex:none;width:9px;height:9px;background:var(--acc)}
+.hero .hs .big{margin-left:-.02em;font-size:clamp(28px,min(3.6vw,7.4vh),72px);line-height:1.08;letter-spacing:-.025em;text-transform:uppercase}
+.hero .hs .big em{font-style:normal;color:inherit}
+@media (min-width:1001px){.hero .hs .lbl{min-height:calc(clamp(15px,1.1vw,18px) * 1.45)}}
+.hero .ln>span{white-space:nowrap}
+.hero .side{display:flex;flex-direction:column;justify-content:space-between;padding-left:clamp(16px,1.4vw,24px);border-left:1px solid rgba(255,255,255,.24)}
+.hero .ps p{align-self:start;max-width:40ch;font-size:clamp(15px,1.1vw,18px)}
+.hero .act{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px}
+.hero .more{margin:0;padding:0;border:0;font-size:13px;letter-spacing:.06em;text-transform:uppercase;transition:color .2s}
+.hero .more:hover{color:var(--acc)}
+.hero .dn{display:grid;place-items:center;flex:none;width:52px;height:46px;border-radius:2px;background:rgba(255,255,255,.1);font-size:16px;transition:background .2s}
+.hero .dn:hover{background:rgba(255,255,255,.22)}
+@media (max-width:1000px){
+  .hero .stage{grid-template-columns:minmax(0,1fr);height:auto;row-gap:18px}
+  .hero .hs{justify-content:flex-end;gap:14px}
+  .hero .hs .big{font-size:clamp(26px,5.4vw,46px)}
+  .hero .ln>span{white-space:normal}
+  .hero .side{display:block;padding-left:0;border-left:0}
+  .hero .ps p{align-self:end}
+  .hero .act{margin-top:14px}
+  .hero .dn{display:none}
+}
+@media (max-width:680px){.hero .hs .big{font-size:6.9vw}.hero .ln>span{text-wrap:balance}}
+
+/* шапка: телефон главная кнопка */
+
+/* метка подписей блоков: объёмный кубик-заготовка в стиле значков производства */
+html[data-c="lime"] .lbl.a::before{width:16px;height:16px;margin-right:8px;vertical-align:-3.5px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='%23111111' stroke-width='1.3' stroke-linejoin='round'%3E%3Cpath fill='%23B9CF3D' d='M9 1.5 15.5 5.25 9 9 2.5 5.25Z'/%3E%3Cpath d='M2.5 5.25V12.75L9 16.5 15.5 12.75V5.25M9 9V16.5'/%3E%3C/svg%3E") center/contain no-repeat}
+html[data-c="lime"] .dk .lbl.a::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='%23B9CF3D' stroke-width='1.3' stroke-linejoin='round'%3E%3Cpath fill='%23B9CF3D' d='M9 1.5 15.5 5.25 9 9 2.5 5.25Z'/%3E%3Cpath d='M2.5 5.25V12.75L9 16.5 15.5 12.75V5.25M9 9V16.5'/%3E%3C/svg%3E")}
+.hero .hs .lbl::before{width:16px;height:16px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='%23B9CF3D' stroke-width='1.3' stroke-linejoin='round'%3E%3Cpath fill='%23B9CF3D' d='M9 1.5 15.5 5.25 9 9 2.5 5.25Z'/%3E%3Cpath d='M2.5 5.25V12.75L9 16.5 15.5 12.75V5.25M9 9V16.5'/%3E%3C/svg%3E") center/contain no-repeat}
+
+/* шапка при скролле без подложки: читаются сами плашки */
+
+/* 02: понятная кнопка перехода в направление */
+.eq .bot{flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:22px}
+.eq .bot .btn{height:44px;padding:0 18px}
+.eq a:hover .bot .btn{background:var(--accH)}
+
+/* 11: подвал чёрный, без лаймового */
+.ft,html[data-c="lime"] .ft{background:#121416;color:#fff;--lineW:rgba(255,255,255,.16)}
+.ft .word{color:#fff}
+
+/* 04: 3D-модель целиком, на белом, без обрезки */
+.pj .im:has(img[src*="pryadilnaya"]){background:#fff}
+.pj .im img[src*="pryadilnaya"]{object-fit:contain;padding:6%}
+
+/* 06: без видео, кнопка сразу под текстом */
+
+/* 10: контакты без фото, тот же цвет, что у блока «Нам доверяют» */
+.ct{background:#121416}
+.ct::after{content:none}
+/* подписи разделов без значка */
+html[data-c] .lbl.a::before,html[data-c] .dk .lbl.a::before,.hero .hs .lbl::before{content:none;display:none}
+.hero .hs .lbl{gap:0}
+
+/* шапка: при наведении снизу выезжает лаймовая заливка */
+@media (hover:hover){
+  .hdr nav a,.hdr .tel{position:relative;overflow:hidden;isolation:isolate;transition:background .2s,color .35s}
+
+}
+
+/* 06: производство. Предмет по центру, поверх проезжают плашки (по референсу prorehabilitation.ru) */
+.pc{position:relative;background:#fff;color:var(--ink);padding:calc(var(--sec) - 28px) 0 var(--sec);--line:rgba(17,17,17,.12);--mut:#9A9D9B;--txt:#55585A;--card:rgba(242,243,241,.62);--g:12px}
+.pc .hd{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:var(--g);padding:28px var(--pad) 0;border-top:1px solid var(--line)}
+.pc .hd .lbl{color:var(--mut)}
+.pc .hd h2{font-size:clamp(34px,3.6vw,60px);font-weight:500;line-height:1.02;letter-spacing:-.035em;text-wrap:balance}
+.pc .hd h2 span{display:block;color:var(--mut)}
+.pc .hd p{max-width:52ch;margin-top:22px;font-size:clamp(17px,1.25vw,20px);line-height:1.45;color:var(--txt)}
+.pc .stage{position:relative;margin-top:calc(-1 * clamp(90px,15vh,170px))}
+.pc .hd{position:relative;z-index:3}
+.pc .obj{position:sticky;top:0;height:100vh;display:grid;place-items:center;pointer-events:none}
+/* редуктор стоит неподвижно (Даша, 20.11) */
+.pc .obj img{width:min(72vw,1060px);height:auto;max-height:86vh;object-fit:contain}
+.pc .cards{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--g);margin-top:-100vh;padding:62vh var(--pad) 0}
+.pc .cd{display:flex;flex-direction:column;justify-content:space-between;gap:28px;min-height:clamp(300px,25vw,400px);padding:clamp(18px,1.5vw,26px);background:var(--card);-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%)}
+.pc .cd .t{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+.pc .cd h3{max-width:17ch;font-size:clamp(20px,1.6vw,26px);font-weight:500;line-height:1.12;letter-spacing:-.02em;text-wrap:balance}
+.pc .cd .n{flex:none;font-size:14px;font-weight:500;letter-spacing:.04em;color:var(--mut)}
+.pc .cd p{max-width:40ch;font-size:clamp(15px,1.05vw,17px);line-height:1.45;color:var(--txt)}
+.pc .c1{grid-area:1/2}.pc .c2{grid-area:1/3}.pc .c3{grid-area:2/1}.pc .c4{grid-area:2/3}.pc .c5{grid-area:3/2}
+.pc .cd .bot{display:flex;flex-direction:column;gap:22px}
+.pc .cd .btn{align-self:flex-start}
+.pc .c5{position:relative;overflow:hidden;background:#141618;color:#fff;--mut:rgba(255,255,255,.45);--txt:rgba(255,255,255,.72);-webkit-backdrop-filter:none;backdrop-filter:none}
+/* без лаймового свечения и шкалы (Даша, 19.11) */
+.pc .c5::before{content:none}
+.pc .c5>*{position:relative}
+@media (max-width:900px){
+  .pc .hd{grid-template-columns:1fr}
+  .pc .stage{margin-top:16px}
+  .pc .obj{position:relative;height:auto;padding:24px var(--pad)}
+  .pc .obj img{width:100%;max-height:none}
+  .pc .cards{grid-template-columns:1fr;margin-top:0;padding:16px var(--pad) 0}
+  .pc .c1,.pc .c2,.pc .c3,.pc .c4,.pc .c5{grid-area:auto}
+  .pc .cd{min-height:240px}
+}
+@media (prefers-reduced-motion:reduce){.pc .obj img{transform:none}}
+
+/* кнопки: одна анимация для всех, заливка выезжает снизу, как в меню */
+/* кнопки снова прямоугольные (Даша, 20.11); телефон в острове со скруглением 4px, как пункты меню */
+.btn{border-radius:0;clip-path:none}
+.hdr .tel{border-radius:4px;clip-path:none}
+.btn{position:relative;overflow:hidden;isolation:isolate}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:var(--accH);transform:translateY(102%);transition:transform .4s cubic-bezier(.23,1,.32,1);will-change:transform}
+.btn.w::before{background:#EDEDED}
+html[data-c="lime"] .dk .btn.w::before{background:var(--accH)}
+.btn:focus-visible::before{transform:none;transition-duration:.6s}
+@media (hover:hover){.btn:hover::before,a:hover .btn::before{transform:none;transition-duration:.6s}}
+/* фон под заливкой не меняется, иначе её не видно */
+html .btn:hover,html .eq a:hover .bot .btn{background:var(--acc)}
+html .btn.w:hover{background:#fff}
+html[data-c="lime"] .dk .btn.w:hover{background:var(--acc)}
+@media (prefers-reduced-motion:reduce){.btn::before{transition:none}}
+
+/* 04: проекты на светлых плашках, как карточки у референса: фото с полем 10px, текст с полем 20px, внизу кнопка */
+.pj{gap:15px}
+.pj a{display:grid;grid-row:span 5;grid-template-rows:subgrid;row-gap:0;align-content:start;padding:0;background:#F4F4F5;border-radius:3px}
+.pj a>.im{margin:10px 10px 0}
+.pj .im{border-radius:2px}
+.pj h3{margin:22px 20px 0}
+.pj .lbl{margin:12px 20px 0}
+.pj p{margin:12px 20px 0}
+.pj a>.lnk{justify-self:start;align-self:end;margin:28px 20px 20px}
+
+/* 06: кнопка на графитовой плашке белая, текст чёрный, заливка светло-серая */
+
+/* меню: один пункт «Направления», при наведении (или нажатии) под ним по очереди выезжают четыре направления */
+.hdr .dd{position:relative}
+.hdr .dd-t span{display:inline-block;margin-left:8px;font-size:12px;transition:transform .35s var(--out)}
+.hdr .dd.open .dd-t span{transform:rotate(180deg)}
+.hdr .dd-p{position:absolute;left:0;top:100%;z-index:5;display:flex;flex-direction:column;gap:4px;min-width:100%;padding-top:14px;visibility:hidden;pointer-events:none;transition:visibility 0s .5s}
+.hdr nav .dd-p a{width:max-content;min-width:100%;opacity:0;transform:translateY(-10px);transition:opacity .25s,transform .35s var(--out),background .2s,color .35s;transition-delay:0s}
+.hdr .dd.open .dd-p{visibility:visible;pointer-events:auto;transition-delay:0s}
+.hdr .dd.open .dd-p a{opacity:1;transform:none;transition-delay:calc(var(--i) * 70ms)}
+/* под меню на первом экране плашки плотнее, чтобы текст читался поверх видео */
+.hdr .dd-p a{background:rgba(40,42,44,.78);color:#fff;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.hdr.solid .dd-p a{background:rgba(244,244,242,.97);color:var(--ink);box-shadow:0 0 0 1px rgba(17,17,17,.06)}
+@media (prefers-reduced-motion:reduce){.hdr nav .dd-p a{transform:none;transition:opacity .2s}}
+/* мобильное меню: «Направления» раскрываются нажатием */
+.mnav .mdd-t{display:flex;justify-content:space-between;align-items:center;width:100%;padding:14px 0;border:0;border-bottom:1px solid var(--line);background:none;font:500 17px/1.3 Inter,system-ui,sans-serif;letter-spacing:-.02em;color:inherit;text-align:left;cursor:pointer}
+.mnav .mdd-t span{font-size:15px;transition:transform .35s var(--out)}
+.mnav .mdd-t[aria-expanded="true"] span{transform:rotate(180deg)}
+.mnav .mdd{max-height:0;overflow:hidden;transition:max-height .45s var(--out)}
+.mnav .mdd.open{max-height:320px}
+.mnav .mdd a{padding-left:16px;font-size:16px;opacity:0;transform:translateY(-8px);transition:opacity .25s,transform .35s var(--out)}
+.mnav .mdd.open a{opacity:1;transform:none;transition-delay:calc(var(--i) * 60ms + 80ms)}
+
+/* лаймовые кнопки только у телефона и «Все проекты»; остальное текстовые ссылки (Даша, 20.11).
+   Линия под ссылкой при наведении прорисовывается лаймом, стрелка сдвигается; в карточках срабатывает от всей карточки */
+.lnk{display:inline-flex;align-items:center;gap:10px;align-self:flex-start;padding-bottom:6px;font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;line-height:1.3;color:inherit;white-space:nowrap;
+  background:linear-gradient(var(--acc),var(--acc)) left bottom/0 2px no-repeat,linear-gradient(currentColor,currentColor) left bottom/100% 1px no-repeat;transition:background-size .5s var(--out)}
+.lnk>span{display:inline-block;transition:transform .4s var(--out)}
+@media (hover:hover){
+  .lnk:hover,a:hover>.lnk,a:hover .bot .lnk{background-size:100% 2px,100% 1px}
+  .lnk:hover>span,a:hover>.lnk>span,a:hover .bot .lnk>span{transform:translateX(5px)}
+}
+.lnk:focus-visible{background-size:100% 2px,100% 1px}
+
+/* все светлые блоки и фон страницы чисто белые, серых блоков нет (20.11) */
+body{background:#fff}
+/* единая система заголовков блоков (20.11): заглавные, как на первом экране;
+   серая вторая часть — только в «О компании», «Производстве» и «Крановом оборудовании» */
+.h2,.ab .stm,.pc .hd h2{text-transform:uppercase;letter-spacing:-.025em;line-height:1.06}
+html[data-c] .acc{display:block;color:#8A8D8B;background:none;padding:0;margin:0}
+.cr .h2{max-width:30ch}
+.pc .hd h2 span{color:#8A8D8B}
+.pc .hd h2{font-size:clamp(32px,3.05vw,52px)}
+.pc .hd .lbl{color:var(--ink)}
+
+/* 20.11: единая шапка блока — подпись в левой колонке, заголовок со сдвигом на 1/4, как в «О компании» */
+.shead{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:clamp(16px,1.8vw,28px);align-items:end}
+.shead>div{display:contents}
+.shead .lbl{grid-column:1/4;grid-row:1;align-self:start;margin:0;padding-top:10px}
+.shead .h2{grid-column:4/10;grid-row:1;max-width:24ch}
+.shead .ld{grid-column:4/10;grid-row:2}
+.shead>.btn,.shead>.lnk{grid-column:10/13;grid-row:1/span 2;justify-self:end;align-self:end}
+.cr>.shead{align-self:stretch;text-align:left;margin-bottom:clamp(8px,1vw,20px)}
+.cr>.shead .lbl{margin:0}
+.pc .hd{grid-template-columns:repeat(12,minmax(0,1fr));column-gap:clamp(16px,1.8vw,28px)}
+.pc .hd .lbl{grid-column:1/4;padding-top:10px}
+.pc .hd>div{grid-column:4/13}
+@media (max-width:1000px){.shead .lbl,.shead .h2,.shead .ld,.shead>.btn,.shead>.lnk,.pc .hd .lbl,.pc .hd>div{grid-column:1/-1;grid-row:auto;justify-self:start}.shead .lbl{margin-bottom:22px;padding-top:0}.shead>.btn,.shead>.lnk{margin-top:28px}.pc .hd .lbl{padding-top:0}}
+/* 20.11: огнеупоры — плотность под названием, без толкотни в одной строке */
+.rf .top{flex-direction:column;justify-content:flex-start;gap:6px}
+.cr>.shead .h2{grid-column:4/13;max-width:30ch}
+@media (max-width:1000px){.cr>.shead .h2{grid-column:1/-1}}
+/* 20.11: слово в футере уходит в фон, чтобы не спорить со шрифтом логотипа */
+.ft .word{color:rgba(255,255,255,.07)}
+/* 20.11: стеклянная плашка только под пунктами меню; логотип и телефон стоят отдельно */
+.hdr,.hdr.glass,.hdr.solid{padding:0;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none}
+.hdr nav,.hdr .burger{border-radius:8px;background:rgba(255,255,255,.15);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:background .3s,box-shadow .3s}
+.hdr nav{padding:4px}
+.hdr.glass nav,.hdr.glass .burger{background:rgba(30,32,34,.5)}
+.hdr.solid nav,.hdr.solid .burger{background:rgba(244,244,242,.9);box-shadow:0 0 0 1px rgba(17,17,17,.06)}
+@media (min-width:681px){.hdr .tel{height:calc(var(--ih) - 8px)}.hdr .burger{width:calc(var(--ih) - 8px);height:calc(var(--ih) - 8px)}}
+/* 20.11: острые углы — фото, карточки проектов, плашка меню и все кнопки */
+.hdr nav,.hdr nav a,.hdr .burger,.hdr .tel,.mnav,.btn,.hero .dn,.pj a,.pj .im,img,video{border-radius:0}
+/* 20.11: контакты в подвале с отступом от линии, как у других колонок; адрес по строкам */
+.ft .cols>div:nth-child(5){padding-left:24px}
+
+/* ===== 20.11: шкала шрифтов из 6 размеров, капслок только у подписей блоков и кнопок ===== */
+:root{--fs-d:clamp(40px,min(3.6vw,7.4vh),72px);--fs-2:clamp(32px,3.05vw,52px);--fs-3:clamp(20px,1.6vw,26px);--fs-l:clamp(17px,1.3vw,20px);--fs-b:16px;--fs-s:13px}
+html .fg .pl b{font-size:var(--fs-d)}
+html .h2,html .pc .hd h2,html .ab .stm,html .ct .tel{font-size:var(--fs-2)}
+html .pc .cd h3,html .cr .it h3,html .pj h3,html .ft .big,html .ct .info span,html .eq .top>.lbl,html .rf .top span{font-size:var(--fs-3)}
+html .ld,html .pc .hd p,html .hero .ps p,html .ab .tx p{font-size:var(--fs-l)}
+html .eq .bot p,html .pj p,html .rf .it p,html .pc .cd p,html .cr .it .p,html .fg .pl span,html .hero .tab,html .mnav a,html .mnav .mdd-t,html .ft .cols li,html .ft .cols li a,html .lnk,html .hero .more{font-size:var(--fs-b)}
+@media (min-width:1421px){html .hdr .tel{font-size:var(--fs-b)}}
+html .eq .specs,html .pj .lbl,html .rf .top i,html .ft .legal,html .pc .cd .n,html .ct .info b,html .ft h4,html .mnav .btn{font-size:var(--fs-s)}
+/* капслок убран: названия карточек, характеристики, категории, ссылки, юридическая строка */
+html .eq .top>.lbl,html .rf .top{text-transform:none;letter-spacing:-.02em;line-height:1.15}
+html .rf .top i{letter-spacing:0;line-height:1.4}
+html .eq .specs,html .pj .lbl,html .ft .legal{text-transform:none;letter-spacing:0}
+html .pj .lbl{color:var(--ink3)}
+html .lnk,html .hero .more{text-transform:none;letter-spacing:-.01em}
+/* шкала остаётся в hero и на границах блоков; у кранов и по краям — нет */
+html .cr .row::before{content:none}
+.hdr .logo{transition:opacity .3s,transform .45s var(--out)}
+.hdr.nologo .logo{opacity:0;transform:translateY(-10px);pointer-events:none}
+html .ab .stm{grid-column:4/13;max-width:none}
+@media (max-width:1000px){html .ab .stm{grid-column:1/-1}}
+/* 20.11: заголовок → текст на 1,5 раза ближе (видимое расстояние от букв до букв) */
+html .shead .ld{margin-top:3px}
+html .pc .hd p{margin-top:35px}
+html .ab .tx{margin-top:calc(clamp(40px,4.4vw,72px) * -.855 + 24px)}
+html .ct .tel{margin-top:42px}
+/* 20.11: в hero одна ссылка «Подробнее →» в стиле ссылок сайта, без квадрата со стрелкой вниз */
+html .hero .more{padding-bottom:6px}
+
+/* 20.11: меню и телефон — текст перекатывается вверх, снизу приходит такой же (вариант 2 из navanim10) */
+.hdr .t{position:relative;display:inline-block;overflow:hidden;line-height:1.3;vertical-align:top}
+.hdr .t>s{display:block;text-decoration:none;transition:transform .5s var(--ease)}
+.hdr .t>s+s{position:absolute;left:0;top:100%}
+.hdr nav .t>s+s{color:var(--acc)}
+.hdr.solid nav .t>s+s,.hdr.solid .dd-p .t>s+s{color:var(--ink)}
+.hdr .tel svg{transition:transform .5s var(--ease)}
+@media (hover:hover){
+  .hdr nav a:hover .t>s,.hdr .tel:hover .t>s{transform:translateY(-100%)}
+  .hdr .tel:hover svg{transform:rotate(-14deg)}
+}
+.hdr nav a:focus-visible .t>s,.hdr .tel:focus-visible .t>s{transform:translateY(-100%)}
+@media (prefers-reduced-motion:reduce){.hdr .t>s,.hdr .tel svg{transition:none}}
+.hdr .dd-t .t{margin-left:0;font-size:inherit;transform:none!important}
+
+/* ===== Галерея: точь-в-точь как на 5kubov7bar.ru — блок 800 px растянут под экран, карточки 300×350, соседние повёрнуты на 40° ===== */
+.cfg{position:relative;z-index:2;padding:var(--sec) 0;background:#121416}
+.cfg .cf-wrap{--W:min(66.667vw,calc(100vw - 40px));width:var(--W);margin:0 auto}
+.cfg .cf{height:calc(var(--W) * .5);padding-bottom:calc(var(--W) * .0625)!important}
+.cfg .swiper-slide{width:calc(var(--W) * .375);height:calc(var(--W) * .4375);overflow:hidden;background:#1b1d1e}
+.cfg .swiper-slide img{display:block;width:100%;height:100%;object-fit:cover}
+.cfg .swiper-pagination-bullet{width:5px;height:5px;margin:0 2px!important;background:#fff;opacity:.3}
+.cfg .swiper-pagination-bullet-active{opacity:1}
+@media (max-width:1180px){.cfg .cf-wrap{--W:min(610px,calc(100vw - 40px))}}
+@media (max-width:680px){.cfg .cf{height:calc(70vw + 30px);padding-bottom:30px!important}.cfg .swiper-slide{width:60vw;height:70vw}}
+/* 22.11: в подвале едва заметный линейный чертёж редуктора, как фон у BAYSAR (линии чуть светлее фона) */
+.ft{position:relative;isolation:isolate}
+.ft::before{content:"";position:absolute;z-index:-1;left:50%;top:clamp(40px,6vw,110px);width:min(1500px,96vw);aspect-ratio:2894/1557;translate:-50% 0;
+  background:url(img/lines/reducer-thin.png) center/contain no-repeat;opacity:.1;pointer-events:none}
+/* 22.11: слово РЕМАРТ в подвале снова белое и насыщенное, чертёж под ним — фоном (как у BAYSAR) */
+html .ft .word{color:#fff;position:relative;z-index:1}
+
+/* ===== «Ремарт в цифрах», вариант 10 (22.11): по прокрутке крюк опускается, слева заголовок, плашки переворачиваются, как табло ===== */
+.fb{position:relative;z-index:2;height:340vh;background:#121416;color:#fff}
+.fb .st{position:sticky;top:0;height:100vh;overflow:hidden;perspective:1400px}
+.fb .hook{position:absolute;z-index:1;left:50%;top:0;height:84vh;width:auto;max-width:44vw;translate:-50% calc((1 - var(--t,1)) * -78vh);pointer-events:none}
+.fb .hd{position:absolute;z-index:3;left:var(--pad);top:18vh;margin:0;opacity:var(--t,1);translate:0 calc((1 - var(--t,1)) * 28px)}
+.fb .pl{position:absolute;z-index:2;display:flex;flex-direction:column;justify-content:space-between;gap:24px;width:24vw;min-height:20vh;padding:clamp(18px,1.6vw,26px);
+  border:1px solid rgba(255,255,255,.14);background:rgba(18,20,22,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  transform-origin:50% 0;transform:rotateX(calc((1 - var(--t,1)) * -95deg));opacity:clamp(0, calc(var(--t,1) * 3), 1)}
+.fb .pl b{display:block;font-size:var(--fs-d);font-weight:500;line-height:.95;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.fb .pl span{font-size:var(--fs-b);line-height:1.35;color:rgba(255,255,255,.7);max-width:18ch}
+.fb .pl.lime b{color:var(--acc)}
+.fb .L1{left:var(--pad);top:42vh}.fb .L2{left:var(--pad);top:68vh}
+.fb .R1{right:var(--pad);top:16vh}.fb .R2{right:var(--pad);top:43vh}.fb .R3{right:var(--pad);top:70vh}
+@media (max-width:760px){
+  .fb .hook{max-width:80vw;height:70vh}
+  .fb .hd{top:14vh}
+  .fb .pl{width:calc(50% - 18px);min-height:0;gap:14px;padding:16px}
+  .fb .L1,.fb .L2{left:12px}.fb .R1,.fb .R2,.fb .R3{right:12px}
+  .fb .L1{top:34vh}.fb .R1{top:34vh}.fb .L2{top:56vh}.fb .R2{top:56vh}.fb .R3{top:78vh}
+}
+/* 22.11: в карточках производства вместо номеров — косые палочки, как у AFFORD: N ярких из 5 */
+.pc .cd .bars{flex:none;display:flex;gap:4px;padding-top:6px}
+.pc .cd .bars i{display:block;width:9px;height:16px;background:var(--acc);opacity:.28;transform:skewX(-20deg)}
+.pc .cd .bars i.on{opacity:1}
+
+/* 22.11: под галереей линейка вместо точек (как у AFFORD) */
+.cfg .cf{padding-bottom:0!important;height:calc(var(--W) * .4375)}
+.cfg .cf-meter{display:grid;grid-template-columns:auto 1fr;align-items:end;gap:clamp(24px,8vw,140px);margin:clamp(36px,3.4vw,56px) var(--pad) 0}
+.cfg .cnt{font-size:var(--fs-b);color:rgba(255,255,255,.45);font-variant-numeric:tabular-nums;line-height:1}
+.cfg .cnt b{font-weight:400;color:#fff}
+.cfg .rul{position:relative;height:40px}
+.cfg .rul i{position:absolute;bottom:0;width:1px;background:#fff;opacity:.22}
+.cfg .rul .mk{position:absolute;bottom:0;width:2px;height:34px;margin-left:-.5px;background:var(--acc)}
+.cfg .rul .mk::before{content:"";position:absolute;left:50%;top:-4px;width:8px;height:8px;translate:-50% 0;background:var(--acc)}
+#partners::before{content:none}
+@media (max-width:680px){.cfg .cf{height:70vw}}
+/* 22.11: линейка галереи строго по центру, ширина как у галереи, без счётчика, движение медленнее */
+.cfg .cf-meter{display:block;width:min(66.667vw,calc(100vw - 40px));margin:clamp(36px,3.4vw,56px) auto 0}
+@media (max-width:1180px){.cfg .cf-meter{width:min(610px,calc(100vw - 40px))}}
+</style>
+</head>
+<body>
+
+<header class="hdr" id="hdr">
+  <a class="logo" href="#"><img id="logo" src="img/logo-white.svg" alt="Ремарт"></a>
+  <nav class="g2" aria-label="Меню">
+    <div class="dd" id="dd">
+      <a class="dd-t" href="#dirs" aria-haspopup="true" aria-expanded="false"><span class="t"><s>Направления</s><s aria-hidden="true">Направления</s></span> <span aria-hidden="true">↓</span></a>
+      <div class="dd-p">
+        <a href="#dirs" style="--i:0"><span class="t"><s>Промышленный инжиниринг</s><s aria-hidden="true">Промышленный инжиниринг</s></span></a>
+        <a href="#cranes" style="--i:1"><span class="t"><s>Крановое оборудование</s><s aria-hidden="true">Крановое оборудование</s></span></a>
+        <a href="#refractory" style="--i:2"><span class="t"><s>Огнеупорные материалы</s><s aria-hidden="true">Огнеупорные материалы</s></span></a>
+        <a href="#production" style="--i:3"><span class="t"><s>Металлообработка</s><s aria-hidden="true">Металлообработка</s></span></a>
+      </div>
+    </div>
+    <a href="#projects"><span class="t"><s>Проекты</s><s aria-hidden="true">Проекты</s></span></a>
+    <a href="#about"><span class="t"><s>О&nbsp;компании</s><s aria-hidden="true">О&nbsp;компании</s></span></a>
+    <a href="#contact"><span class="t"><s>Контакты</s><s aria-hidden="true">Контакты</s></span></a>
+  </nav>
+  <a class="tel" href="tel:+73912147676"><i data-lucide="phone"></i><span class="t"><s>+7 (391) 214-76-76</s><s aria-hidden="true">+7 (391) 214-76-76</s></span></a>
+  <button class="burger" id="burger" aria-label="Меню"><s></s><s></s><s></s></button>
+</header>
+<div class="mnav" id="mnav">
+  <button class="mdd-t" id="mddT" type="button" aria-expanded="false">Направления <span aria-hidden="true">↓</span></button>
+  <div class="mdd" id="mdd"><a href="#dirs" style="--i:0">Промышленный инжиниринг</a><a href="#cranes" style="--i:1">Крановое оборудование</a><a href="#refractory" style="--i:2">Огнеупорные материалы</a><a href="#production" style="--i:3">Металлообработка</a></div>
+  <a href="#projects">Проекты</a><a href="#about">О&nbsp;компании</a><a href="#contact">Контакты</a>
+  <a class="btn" href="tel:+73912147676">Позвонить</a>
+</div>
+
+<!-- 01. ПЕРВЫЙ ЭКРАН: слайдер четырёх направлений, телефон и кнопка звонка в шапке -->
+<section class="hero dk" id="hero">
+  <video src="img/reel.mp4" muted loop playsinline autoplay preload="auto"></video>
+
+  <div class="stage">
+    <div class="stack">
+      <div class="hs on">
+        <div class="lbl">От проекта до&nbsp;монтажа и&nbsp;сервиса</div>
+        <h1 class="big"><span class="ln"><span><em>Инжиниринг полного цикла</em></span></span><span class="ln"><span>для&nbsp;промышленности</span></span></h1>
+      </div>
+      <div class="hs">
+        <div class="lbl">Проектирование, монтаж и&nbsp;обслуживание</div>
+        <h2 class="big"><span class="ln"><span><em>Крановое оборудование</em></span></span><span class="ln"><span>грузоподъёмностью до&nbsp;250&nbsp;т</span></span></h2>
+      </div>
+      <div class="hs">
+        <div class="lbl">Изделия под&nbsp;режим работы линии</div>
+        <h2 class="big"><span class="ln"><span><em>Огнеупорные материалы</em></span></span><span class="ln"><span>для&nbsp;литья алюминия</span></span></h2>
+      </div>
+      <div class="hs">
+        <div class="lbl">Собственный цех с&nbsp;ЧПУ</div>
+        <h2 class="big"><span class="ln"><span><em>Высокоточная обработка</em></span></span><span class="ln"><span>металла на&nbsp;станках с&nbsp;ЧПУ</span></span></h2>
+      </div>
+    </div>
+    <div class="side">
+      <div class="stack ps">
+        <p class="on" data-href="#about">Проектирование, изготовление, поставка, монтаж, наладка и&nbsp;гарантийное обслуживание промышленного оборудования особого назначения.</p>
+        <p data-href="#cranes">Мостовые, козловые и&nbsp;консольные краны, кран-балки, тали и&nbsp;тельферы. Производство за&nbsp;5–6&nbsp;недель, монтаж за&nbsp;10&nbsp;дней.</p>
+        <p data-href="#refractory">Футеровка для&nbsp;разливочных столов и&nbsp;литейных линий, изделия для&nbsp;котлов.</p>
+        <p data-href="#production">Полный комплекс услуг по&nbsp;высокоточной обработке металла на&nbsp;станках с&nbsp;ЧПУ: от&nbsp;единичных изделий до&nbsp;мелкой серии.</p>
+      </div>
+      <div class="act"><a class="more lnk" id="hMore" href="#about">Подробнее <span>→</span></a></div>
+      <div class="mcall"><a href="tel:+73912147676">+7 (391) 214-76-76</a><a class="btn w" href="tel:+73912147676">Позвонить</a></div>
+    </div>
+  </div>
+
+  <div class="scale" id="hScale">
+    <i class="run" id="hRun"></i>
+    <button class="tab on" type="button" aria-current="true"><b>01</b><span>Промышленный инжиниринг</span></button>
+    <button class="tab" type="button"><b>02</b><span>Крановое оборудование</span></button>
+    <button class="tab" type="button"><b>03</b><span>Огнеупорные материалы</span></button>
+    <button class="tab" type="button"><b>04</b><span>Металлообработка</span></button>
+  </div>
+</section>
+
+<!-- 02. ЧЕТЫРЕ НАПРАВЛЕНИЯ -->
+<section class="sec w" id="dirs">
+  <div class="shead">
+    <div><span class="lbl a">Направления</span><h2 class="h2 rv">Основные направления компании</h2><p class="ld">Реверс-инжиниринг, инжиниринг промышленного оборудования, крановое оборудование, огнеупорные материалы и&nbsp;услуги цеха высокоточной металлообработки: от&nbsp;идеи до&nbsp;реализации.</p></div>
+  </div>
+  <div class="eq">
+    <a href="#">
+      <div class="top"><div class="lbl">Промышленный инжиниринг</div><div class="specs"><div><i>Документация:</i> КД по&nbsp;образцу</div><div><i>Аудит:</i> технологический</div></div></div>
+      <div class="pic cut"><img src="img/3d/bearing-housing.png" alt="Корпус подшипникового узла, вал и подшипник"></div>
+      <div class="bot"><p>Реверс-инжиниринг, проектирование оборудования, документация по&nbsp;образцу.</p><span class="lnk">Реверс-инжиниринг и&nbsp;КД <span>→</span></span></div>
+    </a>
+    <a href="#cranes">
+      <div class="top"><div class="lbl">Крановое оборудование</div><div class="specs"><div><i>Грузоподъёмность:</i> до&nbsp;250&nbsp;т</div><div><i>Монтаж:</i> за&nbsp;10&nbsp;дней</div></div></div>
+      <div class="pic"><img src="img/3d/gantry.png?v=4" data-cut="img/3d/gantry.png?v=4" alt="Козловой кран"></div>
+      <div class="bot"><p>Мостовые, козловые и&nbsp;консольные краны, кран-балки: проектирование, монтаж и&nbsp;ремонт.</p><span class="lnk">Типы кранов <span>→</span></span></div>
+    </a>
+    <a href="#refractory">
+      <div class="top"><div class="lbl">Огнеупорные материалы</div><div class="specs"><div><i>Плотность:</i> 1300–2000&nbsp;кг/м³</div><div><i>Отрасль:</i> цветная металлургия</div></div></div>
+      <div class="pic"><img src="img/anilit/krosfider.jpg" data-cut="img/3d/refractory.png" alt="Огнеупорные изделия"></div>
+      <div class="bot"><p>Кросфидеры, желоба, втулки и&nbsp;кольца под режим работы литейной линии.</p><span class="lnk">Каталог изделий <span>→</span></span></div>
+    </a>
+    <a href="#production">
+      <div class="top"><div class="lbl">Металлообработка</div><div class="specs"><div><i>Серия:</i> от&nbsp;5&nbsp;штук</div><div><i>Доставка:</i> по&nbsp;России</div></div></div>
+      <div class="pic"><img src="img/3d/metal.png" data-cut="img/3d/metal.png" alt="Фрезерованная деталь"></div>
+      <div class="bot"><p>Высокоточная обработка на&nbsp;станках с&nbsp;ЧПУ по&nbsp;вашим или нашим чертежам.</p><span class="lnk">Возможности цеха <span>→</span></span></div>
+    </a>
+  </div>
+</section>
+
+<!-- 03. ПОКАЗАТЕЛИ -->
+<section class="fb dk" id="stats">
+  <div class="st">
+    <img class="hook" src="img/hero-obj/hook-gray.webp" alt="Крюковая подвеска мостового крана" data-a="0" data-b=".34">
+    <h2 class="hd h2" data-a=".16" data-b=".36">Ремарт<br>в&nbsp;цифрах</h2>
+    <div class="pl R1 lime" data-a=".36" data-b=".48"><b data-to="1000">1000</b><span>тонн обработанного металла</span></div>
+    <div class="pl L1" data-a=".44" data-b=".56"><b data-to="15">15</b><span>лет работы</span></div>
+    <div class="pl R2" data-a=".52" data-b=".64"><b data-to="250">250</b><span>проектов</span></div>
+    <div class="pl L2" data-a=".60" data-b=".72"><b data-to="12">12</b><span>единиц оборудования</span></div>
+    <div class="pl R3" data-a=".68" data-b=".80"><b data-to="50">50</b><span>ключевых партнёров</span></div>
+  </div>
+</section>
+
+<!-- 05. КРАТКО О КОМПАНИИ -->
+<section class="sec w" id="about">
+  <div class="ab">
+    <span class="lbl a">О&nbsp;компании</span>
+    <h2 class="stm h3 rv">Ремарт проектирует и&nbsp;производит для&nbsp;промышленных предприятий <span class="acc">оборудование особого назначения</span></h2>
+    <div class="tx rv">
+      <p>Проектируем, изготавливаем, поставляем, монтируем и&nbsp;налаживаем промышленное оборудование особого назначения, а&nbsp;затем обслуживаем его по&nbsp;гарантии.</p>
+      <p>Выполняем реверс-инжиниринг и&nbsp;импортозамещение: воссоздаём детали и&nbsp;оборудование, которые больше не&nbsp;поставляются.</p>
+    </div>
+    <div class="c1"><div class="im"><img src="img/graded/own__korpus-reduktora.jpg" alt="Обработка корпуса редуктора на станке с ЧПУ"></div></div>
+    <div class="c2"><div class="im"><img src="img/graded/own__frezerovanie.jpg" alt="Фрезерование детали пресс-формы на станке с ЧПУ"></div></div>
+    <div class="c3"><div class="im"><img src="img/graded/anilit__teplovye-koltsa.jpg" alt="Огнеупорные тепловые кольца"></div><a class="lnk" href="#">Подробнее о&nbsp;компании <span>→</span></a></div>
+  </div>
+</section>
+
+<!-- 04. ПРИОРИТЕТНЫЕ ПРОЕКТЫ -->
+<section class="sec w" id="projects">
+  <div class="shead">
+    <div><span class="lbl a">Проекты</span><h2 class="h2 rv">Задачи, которые мы решили</h2><p class="ld">Реальные задачи заказчиков: от&nbsp;аудита технологии до&nbsp;готовой детали.</p></div>
+    <a class="btn" href="#">Все проекты <span>→</span></a>
+  </div>
+  <div class="pj">
+    <a class="rv" href="#"><div class="im"><img src="img/graded/projects__bystrinskoe.jpg" alt="3D-сканирование детали горного оборудования"></div><h3>Реверс-инжиниринг и&nbsp;подготовка КД для&nbsp;ГРК «Быстринское»</h3><span class="lbl">Промышленный инжиниринг</span><p>Более 70&nbsp;запасных частей горного оборудования: 3D-сканирование, анализ металла и&nbsp;полный комплект КД раньше срока.</p><span class="lnk">Как подготовили КД <span>→</span></span></a>
+    <a class="rv" href="#"><div class="im"><img src="img/graded/projects__pryadilnaya.jpg" alt="3D-модель прядильной машины"></div><h3>Прядильная машина для&nbsp;арамидной нити</h3><span class="lbl">Промышленный инжиниринг</span><p>После технологического аудита двух машин подготовили проект новой линии с&nbsp;лучшими решениями каждой из&nbsp;них.</p><span class="lnk">Как проходил аудит <span>→</span></span></a>
+    <a class="rv" href="#"><div class="im"><img src="img/graded/projects__konvejer.jpg" alt="Конвейер транспортировки листового металла"></div><h3>Конвейер транспортировки листового металла</h3><span class="lbl">Промышленный инжиниринг</span><p>По&nbsp;итогам технологического аудита модернизировали конвейер: разработали механизм подъёма листов для&nbsp;обвязки лентой.</p><span class="lnk">Что модернизировали <span>→</span></span></a>
+    <a class="rv" href="#"><div class="im"><img src="img/graded/projects__osnastka.jpg" alt="Оснастка на роботе-манипуляторе"></div><h3>Высокотехнологичная оснастка для&nbsp;робота-манипулятора</h3><span class="lbl">Металлообработка</span><p>Изготовили в&nbsp;своём цехе по&nbsp;документации заказчика: оснастка автоматически наносит смазку на&nbsp;поверхности пресс-формы.</p><span class="lnk">Как изготовили <span>→</span></span></a>
+  </div>
+</section>
+
+<!-- 06. ПРОИЗВОДСТВЕННЫЕ ВОЗМОЖНОСТИ -->
+<section class="pc" id="production">
+  <div class="hd"><span class="lbl">Производство</span><div><h2>Собственный цех <span>высокоточной металлообработки</span></h2><p>Проектируем и&nbsp;разрабатываем изделия под задачу заказчика.</p></div></div>
+  <div class="stage">
+    <div class="obj"><img src="img/3d/reducer-worm.png" alt="Червячный редуктор в разнесённом виде"></div>
+    <div class="cards">
+      <article class="cd c1"><div class="t"><h3>Детали и&nbsp;узлы различных механизмов</h3><span class="bars" aria-label="1 из 5"><i class="on"></i><i></i><i></i><i></i><i></i></span></div><p>От&nbsp;единичных изделий до&nbsp;мелкой серии от&nbsp;5&nbsp;штук, с&nbsp;контролем качества.</p></article>
+      <article class="cd c2"><div class="t"><h3>Промышленное оборудование специализированного назначения</h3><span class="bars" aria-label="2 из 5"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></div><p>Разрабатываем и&nbsp;изготавливаем оборудование под производственную задачу заказчика.</p></article>
+      <article class="cd c3"><div class="t"><h3>Аналоги импортного оборудования</h3><span class="bars" aria-label="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></div><p>Реверс-инжиниринг по&nbsp;образцу, даже если конструкторской документации нет.</p></article>
+      <article class="cd c4"><div class="t"><h3>Пресс-формы и&nbsp;технологическая оснастка</h3><span class="bars" aria-label="4 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></div><p>Изготавливаем детали пресс-форм и&nbsp;оснастку по&nbsp;чертежам заказчика.</p></article>
+      <article class="cd c5"><div class="t"><h3>Цех на&nbsp;аутсорсинге</h3><span class="bars" aria-label="5 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div><div class="bot"><p>Экономия до&nbsp;20% затрат на&nbsp;содержании собственного цеха и&nbsp;штата.</p><a class="lnk" href="#">О&nbsp;производстве <span>→</span></a></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- 07. КРАНОВОЕ ОБОРУДОВАНИЕ -->
+<section class="sec w" id="cranes">
+  <div class="cr">
+    <div class="shead"><div><span class="lbl a">Крановое оборудование</span><h2 class="h2 rv">Грузоподъёмное оборудование <span class="acc">под рабочие нагрузки и&nbsp;территорию предприятия</span></h2></div></div>
+    <img class="ob" src="img/3d/crane.png" alt="Мостовой кран с тележкой и крюком">
+    <div class="row">
+      <div class="it"><h3>Мостовые краны</h3><p class="p">До&nbsp;250&nbsp;т, пролёт до&nbsp;34,5&nbsp;м, режим&nbsp;работы&nbsp;А3–А8.</p></div>
+      <div class="it"><h3>Козловые краны</h3><p class="p">До&nbsp;250&nbsp;т, пролёт до&nbsp;40&nbsp;м, режим&nbsp;работы&nbsp;А4–А7.</p></div>
+      <div class="it"><h3>Консольные краны</h3><p class="p">До&nbsp;100&nbsp;т, вылет до&nbsp;5&nbsp;м, режим&nbsp;работы&nbsp;А2–А5.</p></div>
+    </div>
+    <a class="lnk" href="#">Сроки и&nbsp;характеристики <span>→</span></a>
+  </div>
+</section>
+
+<!-- 08. ОГНЕУПОРНЫЕ МАТЕРИАЛЫ -->
+<section class="sec w" id="refractory">
+  <div class="shead">
+    <div><span class="lbl a">Огнеупорные материалы</span><h2 class="h2 rv">Огнеупоры для литья алюминия</h2></div>
+    <a class="lnk" href="#">Все изделия и&nbsp;характеристики <span>→</span></a>
+  </div>
+  <div class="rf">
+    <div class="it"><div class="top lbl"><span>Кросфидеры</span><i>1300–1500&nbsp;кг/м³</i></div><div class="pic"><img src="img/graded/anilit__krosfider-razlivochnyy-zhelob.jpg" alt="Кросфидер"></div><p>Распределяют расплав по&nbsp;разливочному столу и&nbsp;держат его температуру.</p></div>
+    <div class="it"><div class="top lbl"><span>Сливные втулки</span><i>1800–2000&nbsp;кг/м³</i></div><div class="pic"><img src="img/graded/anilit__slivnye-vtulki2.jpg" alt="Сливные втулки"></div><p>Подают расплав к&nbsp;кристаллизатору и&nbsp;выдерживают нагрузку потока металла.</p></div>
+    <div class="it"><div class="top lbl"><span>Желоба и&nbsp;лотки</span><i>1800–2000&nbsp;кг/м³</i></div><div class="pic"><img src="img/graded/anilit__zhelob-raspredelitelnyy.jpg" alt="Распределительный желоб"></div><p>Прямые, поворотные и&nbsp;распределительные: система литья под задачу.</p></div>
+    <div class="it"><div class="top lbl"><span>Фильтр-боксы</span><i>1800–2000&nbsp;кг/м³</i></div><div class="pic"><img src="img/graded/anilit__filtr-boksy-filtratsionnye-korobki.jpg" alt="Фильтр-бокс"></div><p>Корпус для&nbsp;пенокерамического фильтра в&nbsp;системе фильтрации расплава.</p></div>
+  </div>
+</section>
+
+<!-- ГАЛЕРЕЯ: карусель с поворотом соседних кадров (как у BAYSAR) -->
+<section class="cfg dk nostk" aria-label="Цех и проекты">
+  <div class="cf-wrap"><div class="swiper cf"><div class="swiper-wrapper"><div class="swiper-slide"><img src="img/graded/projects__bystrinskoe.jpg" alt="3D-сканирование детали горного оборудования" loading="lazy"></div><div class="swiper-slide"><img src="img/graded/own__korpus-reduktora.jpg" alt="Обработка корпуса редуктора на станке с ЧПУ" loading="lazy"></div><div class="swiper-slide"><img src="img/graded/projects__osnastka.jpg" alt="Оснастка на роботе-манипуляторе" loading="lazy"></div><div class="swiper-slide"><img src="img/graded/own__frezerovanie.jpg" alt="Фрезерование детали пресс-формы" loading="lazy"></div><div class="swiper-slide"><img src="img/graded/projects__konvejer.jpg" alt="Конвейер транспортировки листового металла" loading="lazy"></div><div class="swiper-slide"><img src="img/graded/anilit__teplovye-koltsa.jpg" alt="Огнеупорные тепловые кольца" loading="lazy"></div></div></div></div>
+  <div class="cf-meter"><div class="rul" aria-hidden="true"></div></div>
+</section>
+
+<!-- 09. ПАРТНЁРЫ -->
+<section class="sec dk pts" id="partners">
+  <div class="hd">
+    <span class="lbl a">Нам доверяют</span>
+  </div>
+  <div class="mq">
+    <ul>
+      <li><img src="img/partners/nornickel.svg" alt="ГРК «Быстринское», Норникель" style="--w:96px"></li>
+      <li><img src="img/partners/rtcomm.svg" alt="РТКОММ" style="--w:185px"></li>
+      <li><img src="img/partners/nok.png" alt="Новоангарский обогатительный комбинат" style="--w:205px"></li>
+      <li><img src="img/partners/severboat.png" alt="Север" style="--w:200px"></li>
+      <li><img src="img/partners/lstk.svg" alt="ЛСТК Красноярск" style="--w:190px"></li>
+      <li><img src="img/partners/boaz.png" alt="Богучанский алюминиевый завод" style="--w:165px"></li>
+      <li aria-hidden="true"><img src="img/partners/nornickel.svg" alt="" style="--w:96px"></li>
+      <li aria-hidden="true"><img src="img/partners/rtcomm.svg" alt="" style="--w:185px"></li>
+      <li aria-hidden="true"><img src="img/partners/nok.png" alt="" style="--w:205px"></li>
+      <li aria-hidden="true"><img src="img/partners/severboat.png" alt="" style="--w:200px"></li>
+      <li aria-hidden="true"><img src="img/partners/lstk.svg" alt="" style="--w:190px"></li>
+      <li aria-hidden="true"><img src="img/partners/boaz.png" alt="" style="--w:165px"></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 10. КОНТАКТНЫЙ БЛОК: телефон крупно, почта, адрес, кнопка звонка. Формы заявок на сайте нет -->
+<section class="ct dk" id="contact">
+  <div class="in">
+    <div class="l">
+      <span class="lbl">Контакты</span>
+      <h2 class="h2">Обсудим задачу по&nbsp;телефону</h2>
+      <a class="tel" href="tel:+73912147676">+7 (391) 214-76-76</a>
+    </div>
+    <ul class="info">
+      <li><i data-lucide="mail"></i><div><b>Почта</b><span><a href="mailto:aas@24remart.ru">aas@24remart.ru</a></span></div></li>
+      <li><i data-lucide="map-pin"></i><div><b>Адрес</b><span>Красноярск, ул.&nbsp;60&nbsp;лет&nbsp;Октября, 148ж, пом.&nbsp;17</span></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 11. ПОДВАЛ -->
+<footer class="ft dk">
+  <div class="word" aria-hidden="true">РЕМАРТ</div>
+  <div class="cols">
+    <div><p class="big">Инжиниринг полного цикла для&nbsp;промышленных предприятий.</p></div>
+    <div><h4>Компания</h4><ul><li><a href="#about">О&nbsp;компании</a></li><li><a href="#projects">Проекты</a></li><li><a href="#contact">Контакты</a></li></ul></div>
+    <div><h4>Направления</h4><ul><li><a href="#dirs">Промышленный инжиниринг</a></li><li><a href="#cranes">Крановое оборудование</a></li><li><a href="#refractory">Огнеупорные материалы</a></li><li><a href="#production">Металлообработка</a></li></ul></div>
+    <div><h4>Реквизиты</h4><ul><li>ООО&nbsp;«РЕМАРТ»</li><li>ОГРН 1232400020490</li><li>ИНН 2461051346</li><li>КПП 246101001</li></ul></div>
+    <div><h4>Контакты</h4><ul><li>Красноярск,<br>ул.&nbsp;60&nbsp;лет&nbsp;Октября,<br>148ж, пом.&nbsp;17</li><li><a href="mailto:aas@24remart.ru">aas@24remart.ru</a></li><li><a href="tel:+73912147676">+7 (391) 214-76-76</a></li></ul></div>
+  </div>
+  <div class="legal"><span>© 2026&nbsp;ООО&nbsp;«РЕМАРТ». Все права защищены</span><a href="#">Политика конфиденциальности</a></div>
+</footer>
+
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+(() => {
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const out = t => 1 - Math.pow(1 - t, 3);
+
+/* шапка: прозрачная на первом экране, светлая ниже */
+const hdr = $('#hdr'), hero = $('#hero'), logo = $('#logo');
+const hdrBlocks = $$('body>section,body>footer');
+function onScroll() {
+  const y = hdr.getBoundingClientRect().top + hdr.offsetHeight / 2;
+  let under = hdrBlocks[0];
+  hdrBlocks.forEach(b => { const r = b.getBoundingClientRect(); if (r.top <= y && r.bottom > y) under = b; });
+  const solid = !under.classList.contains('dk');
+  hdr.classList.toggle('solid', solid);
+  hdr.classList.toggle('glass', under !== hdrBlocks[0]);
+  logo.src = solid ? 'img/logo.svg' : 'img/logo-white.svg';
+}
+addEventListener('scroll', onScroll, { passive: true }); onScroll();
+/* логотип без подложки: прячем при прокрутке вниз, показываем при прокрутке вверх и на первом экране */
+let lastY = scrollY;
+addEventListener('scroll', () => {
+  const y = scrollY;
+  if (y < innerHeight * .6) hdr.classList.remove('nologo');
+  else if (Math.abs(y - lastY) > 4) hdr.classList.toggle('nologo', y > lastY);
+  lastY = y;
+}, { passive: true });
+const mn = $('#mnav');
+$('#burger').onclick = () => mn.classList.toggle('open');
+mn.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mn.classList.remove('open')));
+/* «Направления»: на мыши по наведению, на касании первым нажатием; Esc и клик мимо закрывают */
+const dd = $('#dd'), ddT = dd.querySelector('.dd-t');
+const ddSet = on => { dd.classList.toggle('open', on); ddT.setAttribute('aria-expanded', on); };
+const hoverable = matchMedia('(hover: hover)');
+let ddTimer;
+dd.addEventListener('mouseenter', () => { if (hoverable.matches) { clearTimeout(ddTimer); ddSet(true); } });
+dd.addEventListener('mouseleave', () => { if (hoverable.matches) ddTimer = setTimeout(() => ddSet(false), 180); });
+dd.addEventListener('focusin', () => ddSet(true));
+dd.addEventListener('focusout', e => { if (!dd.contains(e.relatedTarget)) ddSet(false); });
+ddT.addEventListener('click', e => { if (!hoverable.matches && !dd.classList.contains('open')) { e.preventDefault(); ddSet(true); } });
+dd.querySelectorAll('.dd-p a').forEach(a => a.addEventListener('click', () => { ddSet(false); a.blur(); }));
+document.addEventListener('click', e => { if (!dd.contains(e.target)) ddSet(false); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { ddSet(false); ddT.blur(); } });
+const mddT = $('#mddT'), mdd = $('#mdd');
+mddT.onclick = () => { const on = !mdd.classList.contains('open'); mdd.classList.toggle('open', on); mddT.setAttribute('aria-expanded', on); };
+
+/* первый экран: заголовок, текст и участок линейки меняются вместе */
+const hs = $$('.hero .hs'), ps = $$('.hero .ps p'), tabs = $$('.hero .tab'), run = $('#hRun'), more = $('#hMore');
+let hi = 0, outT;
+function go(i) {
+  const next = (i + hs.length) % hs.length;
+  if (next === hi) return;
+  clearTimeout(outT);
+  hs.forEach(s => s.classList.remove('in', 'out'));
+  const prev = hs[hi];
+  prev.classList.add('out');
+  outT = setTimeout(() => prev.classList.remove('out'), 320);
+  hi = next;
+  hs.forEach((s, k) => { s.classList.toggle('on', k === hi); s.classList.toggle('in', k === hi); });
+  ps.forEach((s, k) => { s.classList.toggle('on', k === hi); s.classList.toggle('in', k === hi); });
+  tabs.forEach((b, k) => { b.classList.toggle('on', k === hi); k === hi ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current'); });
+  more.href = ps[hi].dataset.href;
+  run.style.setProperty('--i', hi);
+  run.style.animation = 'none'; void run.offsetWidth; run.style.animation = '';
+}
+run.addEventListener('animationend', () => go(hi + 1));
+tabs.forEach((b, k) => b.addEventListener('click', () => go(k)));
+
+
+/* производство: предмет стоит неподвижно, поверх проезжают плашки */
+/* направления: если есть объект без фона (PNG), ставим его вместо фото */
+$$('.eq .pic img[data-cut]').forEach(im => {
+  const probe = new Image();
+  probe.onload = () => { im.src = probe.src; im.parentElement.classList.add('cut'); };
+  probe.src = im.dataset.cut;
+});
+
+/* перелистывание блоков: только на больших экранах и без режима «меньше движения» */
+const stackMq = matchMedia('(min-width:1000px) and (prefers-reduced-motion:no-preference)');
+stackMq.addEventListener('change', () => location.reload());
+if (stackMq.matches) {
+  const blocks = $$('body>section,body>footer');
+  document.documentElement.classList.add('stk');
+  /* контакты и подвал идут одним блоком, без наложения друг на друга */
+  /* без наложения: направления → цифры, проекты → о компании, о компании → производство, краны → огнеупоры, огнеупоры → нам доверяют, контакты → подвал */
+  [$('#dirs'), $('#stats'), $('#projects'), $('#about'), $('#cranes'), $('#refractory'), $('#contact'), $('.ft')].forEach(b => b && b.classList.add('nostk'));
+  blocks.forEach((b, i) => {
+    b.style.setProperty('--z', i + 2);
+  });
+  let tops = [], stops = [];
+  const measure = () => {
+    let y = 0;
+    tops = blocks.map(b => { const v = y; y += b.offsetHeight; return v; });
+    stops = blocks.map(b => Math.min(0, innerHeight - b.offsetHeight));
+    blocks.forEach((b, i) => b.style.setProperty('--st', stops[i] + 'px'));
+    paint();
+  };
+  const paint = () => {
+    blocks.forEach((b, i) => {
+      const next = blocks[i + 1];
+      if (!next) return;
+      const from = stops[i] + b.offsetHeight;
+      const p = Math.max(0, Math.min(1, (from - next.getBoundingClientRect().top) / from));
+      b.style.setProperty('--p', p.toFixed(3));
+    });
+  };
+  addEventListener('scroll', paint, { passive: true });
+  addEventListener('resize', measure);
+  new ResizeObserver(measure).observe(document.body);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  measure();
+
+  /* плавная прокрутка колесом */
+  let lenis = null;
+  if (window.Lenis) {
+    lenis = new Lenis({ lerp: .1, wheelMultiplier: 1 });
+    const raf = time => { lenis.raf(time); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+  }
+  /* якоря ведут к настоящему началу блока, даже если он закреплён */
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a || a.getAttribute('href').length < 2) return;
+    const i = blocks.indexOf(document.querySelector(a.getAttribute('href')));
+    if (i < 0) return;
+    e.preventDefault();
+    const y = Math.max(0, tops[i] - hdr.getBoundingClientRect().bottom);
+    lenis ? lenis.scrollTo(y, { duration: 1.2 }) : scrollTo({ top: y, behavior: 'smooth' });
+  });
+}
+
+/* видео играют только в кадре */
+const vio = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause()));
+$$('video').forEach(v => vio.observe(v));
+/* видео в первом экране чуть медленнее, движение спокойнее (20.11) */
+const heroV = $('.hero video');
+if (heroV) { heroV.defaultPlaybackRate = .75; heroV.playbackRate = .75; heroV.addEventListener('loadedmetadata', () => { heroV.playbackRate = .75; }); }
+
+/* цифры набегают */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting || reduce) return;
+  io.unobserve(e.target);
+  const el = e.target, to = +el.dataset.to, from = +(el.dataset.from || 0), tail = el.querySelector('small') ? el.querySelector('small').outerHTML : '';
+  let k = 0; const N = 34;
+  const tick = () => { k++; el.innerHTML = Math.round(from + (to - from) * out(k / N)) + tail; if (k < N) setTimeout(tick, 30); };
+  tick();
+}), { threshold: .5 });
+
+/* показатели (вариант 10): прогресс прокрутки сцены → крюк, заголовок, плашки-табло; цифры набегают вместе с прокруткой */
+const fb = $('#stats');
+if (!reduce) {
+  let raf = 0;
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  const items = $$('#stats [data-a]');
+  const upd = () => {
+    raf = 0;
+    const r = fb.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight)));
+    items.forEach(el => {
+      const a = +el.dataset.a, b = +el.dataset.b;
+      const t = ease(Math.min(1, Math.max(0, (p - a) / (b - a))));
+      el.style.setProperty('--t', t.toFixed(4));
+      const n = el.querySelector('b[data-to]');
+      if (n) n.textContent = Math.round(+n.dataset.to * t);
+    });
+  };
+  const req = () => { if (!raf) raf = requestAnimationFrame(upd); };
+  addEventListener('scroll', req, { passive: true }); addEventListener('resize', req); upd();
+}
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.js"></script>
+<script>
+/* галерея: те же настройки, что на референсе */
+new Swiper('.cfg .cf', {
+  effect: 'coverflow', grabCursor: true, centeredSlides: true, slidesPerView: 'auto', loop: true, speed: 300,
+  coverflowEffect: { rotate: 40, stretch: 0, depth: 100, modifier: 1, slideShadows: true },
+  autoplay: { delay: 1500, disableOnInteraction: true },
+});
+/* линейка: деления «волной» вокруг текущего кадра, метка плавно переезжает */
+(() => {
+  const rul = document.querySelector('.cfg .rul');
+  const sw = document.querySelector('.cfg .cf').swiper, n = document.querySelectorAll('.cfg .swiper-slide:not(.swiper-slide-duplicate)').length;
+  const N = 120, ticks = [];
+  for (let k = 0; k < N; k++) { const t = document.createElement('i'); t.style.left = (k / (N - 1) * 100) + '%'; rul.appendChild(t); ticks.push(t); }
+  const mk = document.createElement('s'); mk.className = 'mk'; rul.appendChild(mk);
+  let cur = 0, target = 0;
+  const pad = .03;                                   // метка не упирается в края линейки
+  const setTarget = () => { target = pad + (1 - 2 * pad) * sw.realIndex / (n - 1); };
+  sw.on('slideChange', setTarget); setTarget(); cur = target;
+  const draw = () => {
+    cur += (target - cur) * .028;
+    const c = cur * (N - 1);
+    ticks.forEach((t, k) => {
+      const d = Math.abs(k - c), w = Math.exp(-(d * d) / 55);
+      t.style.height = ((k % 5 === 0 ? 9 : 5) + 22 * w).toFixed(1) + 'px';
+      t.style.opacity = (.32 + .5 * w).toFixed(3);
+    });
+    mk.style.left = (cur * 100) + '%';
+    requestAnimationFrame(draw);
+  };
+  draw();
+})();
+</script>
+</body>
+</html>
