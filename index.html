@@ -865,6 +865,9 @@ html #about.ab6 .lnk{color:#fff;white-space:nowrap;justify-self:start;align-self
 /* финальная проверка 24.11: острые углы у плашек партнёров; зона нажатия ссылок на тач-экранах не меньше 44px */
 html .mq li{border-radius:0}
 @media (hover:none) and (pointer:coarse){html .lnk{position:relative}html .lnk::after{content:"";position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%)}}
+
+/* проекты: подзаголовок компактным блоком в две строки под заголовком, как в Figma (24.11) */
+html #projects .shead .ld{max-width:38ch}
 </style>
 </head>
 <body>
