@@ -96,7 +96,7 @@ body{position:relative}
 .hdr.glass{background:rgba(30,32,34,.5)}
 .hdr.solid{color:var(--ink);background:rgba(244,244,242,.9);box-shadow:0 0 0 1px rgba(17,17,17,.06)}
 .hdr .logo{display:flex;align-items:center;flex:none;margin-right:auto}
-.hdr .logo img{height:38px;width:auto}
+.hdr .logo img{height:57px;width:auto}
 .hdr nav{display:flex;align-items:center;gap:2px}
 .hdr nav a{display:flex;align-items:center;height:calc(var(--ih) - 16px);padding:0 20px;border-radius:4px;font-size:16px;font-weight:400;line-height:1.15;white-space:nowrap}
 .hdr .tel{display:flex;align-items:center;height:calc(var(--ih) - 16px);margin-left:10px;padding:0 20px;background:var(--acc);color:var(--ink);font-size:15px;font-weight:500;white-space:nowrap}
@@ -109,9 +109,9 @@ body{position:relative}
 .mnav a{display:block;padding:14px 0;border-bottom:1px solid var(--line);font-size:17px;font-weight:500;letter-spacing:-.02em}
 .mnav .btn{display:flex;margin-top:18px;border:0;color:#fff}
 @media (max-width:1420px){.hdr nav a{padding:0 14px;font-size:15px}.hdr .tel{padding:0 16px;font-size:14px}}
-@media (max-width:1100px){.hdr nav a{padding:0 10px;font-size:14px}.hdr .logo img{height:34px}}
+@media (max-width:1100px){.hdr nav a{padding:0 10px;font-size:14px}.hdr .logo img{height:51px}}
 @media (max-width:900px){.hdr nav{display:none}.burger{display:flex}}
-@media (max-width:680px){:root{--hh:68px;--ht:10px}.hdr{left:10px;right:10px;padding:0 6px 0 14px}.hdr .logo img{height:32px}.hdr .tel{height:40px;padding:0 12px;font-size:13px}.hdr .tel svg{display:none}.burger{width:40px;height:40px}.mnav{left:10px;right:10px}}
+@media (max-width:680px){:root{--hh:68px;--ht:10px}.hdr{left:10px;right:10px;padding:0 6px 0 14px}.hdr .logo img{height:48px}.hdr .tel{height:40px;padding:0 12px;font-size:13px}.hdr .tel svg{display:none}.burger{width:40px;height:40px}.mnav{left:10px;right:10px}}
 
 /* =========================================================
    01. ПЕРВЫЙ ЭКРАН
@@ -282,7 +282,7 @@ html[data-c="dark"] .cr .it .more,html[data-c="dark"] .cr .it:hover h3{color:var
 .rf .it:last-child{border-right:0;padding-right:var(--pad)}
 .rf .top{display:flex;justify-content:space-between;gap:12px}
 .rf .top i{font-style:normal;color:var(--ink3)}
-.rf .pic{position:relative;aspect-ratio:1;overflow:hidden;background:#141617}
+.rf .pic{position:relative;aspect-ratio:1;overflow:hidden;background:#F2F3F1}
 .rf .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--out)}
 .rf .it:hover .pic img{transform:scale(1.06)}
 .rf p{font-size:15px;color:var(--ink2);max-width:28ch}
@@ -720,42 +720,127 @@ html .ft .word{color:#fff;position:relative;z-index:1}
 /* ===== «Ремарт в цифрах», вариант 10 (22.11): по прокрутке крюк опускается, слева заголовок, плашки переворачиваются, как табло ===== */
 .fb{position:relative;z-index:2;height:340vh;background:#121416;color:#fff}
 .fb .st{position:sticky;top:0;height:100vh;overflow:hidden;perspective:1400px}
-.fb .hook{position:absolute;z-index:1;left:50%;top:0;height:84vh;width:auto;max-width:44vw;translate:-50% calc((1 - var(--t,1)) * -78vh);pointer-events:none}
+.fb .hook{position:absolute;z-index:1;left:50%;top:0;height:84vh;width:auto;max-width:44vw;translate:-50% calc((1 - var(--t,1)) * (-100% - 4vh));pointer-events:none}
 .fb .hd{position:absolute;z-index:3;left:var(--pad);top:18vh;margin:0;opacity:var(--t,1);translate:0 calc((1 - var(--t,1)) * 28px)}
-.fb .pl{position:absolute;z-index:2;display:flex;flex-direction:column;justify-content:space-between;gap:24px;width:24vw;min-height:20vh;padding:clamp(18px,1.6vw,26px);
-  border:1px solid rgba(255,255,255,.14);background:rgba(18,20,22,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+.fb .pl{position:absolute;z-index:2;display:flex;flex-direction:column;justify-content:space-between;gap:12px;width:24vw;height:var(--ph);padding:clamp(18px,1.6vw,26px);
+  background:rgba(38,41,43,.62);-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);
   transform-origin:50% 0;transform:rotateX(calc((1 - var(--t,1)) * -95deg));opacity:clamp(0, calc(var(--t,1) * 3), 1)}
 .fb .pl b{display:block;font-size:var(--fs-d);font-weight:500;line-height:.95;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
 .fb .pl span{font-size:var(--fs-b);line-height:1.35;color:rgba(255,255,255,.7);max-width:18ch}
 .fb .pl.lime b{color:var(--acc)}
-.fb .L1{left:var(--pad);top:42vh}.fb .L2{left:var(--pad);top:68vh}
-.fb .R1{right:var(--pad);top:16vh}.fb .R2{right:var(--pad);top:43vh}.fb .R3{right:var(--pad);top:70vh}
+/* одна высота плашек --ph и один шаг --g: расстояние между всеми плашками одинаковое */
+.fb{--ph:max(20vh,176px);--g:7vh}
+.fb .L1{left:var(--pad);top:42vh}.fb .L2{left:var(--pad);top:calc(42vh + var(--ph) + var(--g))}
+.fb .R1{right:var(--pad);top:16vh}.fb .R2{right:var(--pad);top:calc(16vh + var(--ph) + var(--g))}.fb .R3{right:var(--pad);top:calc(16vh + (var(--ph) + var(--g)) * 2)}
 @media (max-width:760px){
   .fb .hook{max-width:80vw;height:70vh}
   .fb .hd{top:14vh}
-  .fb .pl{width:calc(50% - 18px);min-height:0;gap:14px;padding:16px}
+  .fb{--ph:max(15vh,132px);--g:12px}
+  .fb .pl{width:calc(50% - 18px);gap:8px;padding:16px}
   .fb .L1,.fb .L2{left:12px}.fb .R1,.fb .R2,.fb .R3{right:12px}
-  .fb .L1{top:34vh}.fb .R1{top:34vh}.fb .L2{top:56vh}.fb .R2{top:56vh}.fb .R3{top:78vh}
+  .fb .L1,.fb .R1{top:34vh}.fb .L2,.fb .R2{top:calc(34vh + var(--ph) + var(--g))}.fb .R3{top:calc(34vh + (var(--ph) + var(--g)) * 2)}
 }
-/* 22.11: в карточках производства вместо номеров — косые палочки, как у AFFORD: N ярких из 5 */
-.pc .cd .bars{flex:none;display:flex;gap:4px;padding-top:6px}
-.pc .cd .bars i{display:block;width:9px;height:16px;background:var(--acc);opacity:.28;transform:skewX(-20deg)}
-.pc .cd .bars i.on{opacity:1}
+/* 23.11: в карточках производства вместо номеров — пять квадратов, N лаймовых из 5 */
+.pc .cd .bars{flex:none;display:flex;gap:4px;padding-top:8px;--off:rgba(17,17,17,.14)}
+.pc .c5 .bars{--off:rgba(255,255,255,.16)}
+.pc .cd .bars i{display:block;width:8px;height:8px;background:var(--off)}
+.pc .cd .bars i.on{background:var(--acc)}
 
 /* 22.11: под галереей линейка вместо точек (как у AFFORD) */
 .cfg .cf{padding-bottom:0!important;height:calc(var(--W) * .4375)}
 .cfg .cf-meter{display:grid;grid-template-columns:auto 1fr;align-items:end;gap:clamp(24px,8vw,140px);margin:clamp(36px,3.4vw,56px) var(--pad) 0}
 .cfg .cnt{font-size:var(--fs-b);color:rgba(255,255,255,.45);font-variant-numeric:tabular-nums;line-height:1}
 .cfg .cnt b{font-weight:400;color:#fff}
-.cfg .rul{position:relative;height:40px}
-.cfg .rul i{position:absolute;bottom:0;width:1px;background:#fff;opacity:.22}
-.cfg .rul .mk{position:absolute;bottom:0;width:2px;height:34px;margin-left:-.5px;background:var(--acc)}
-.cfg .rul .mk::before{content:"";position:absolute;left:50%;top:-4px;width:8px;height:8px;translate:-50% 0;background:var(--acc)}
+.cfg .rul{position:relative;height:40px;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.22)}
+.cfg .rul i{position:absolute;bottom:0;width:1px;height:6px;background:#fff;opacity:.22;transition:opacity .6s ease}
+.cfg .rul i.m{height:11px}.cfg .rul i.l{height:18px}
+.cfg .rul i.on{opacity:.55}
+.cfg .rul .mk{position:absolute;bottom:0;width:2px;height:28px;margin-left:-1px;background:var(--acc)}
+.cfg .rul .mk::before{content:"";position:absolute;left:50%;top:0;width:8px;height:8px;translate:-50% 0;background:var(--acc)}
 #partners::before{content:none}
 @media (max-width:680px){.cfg .cf{height:70vw}}
 /* 22.11: линейка галереи строго по центру, ширина как у галереи, без счётчика, движение медленнее */
 .cfg .cf-meter{display:block;width:min(66.667vw,calc(100vw - 40px));margin:clamp(36px,3.4vw,56px) auto 0}
 @media (max-width:1180px){.cfg .cf-meter{width:min(610px,calc(100vw - 40px))}}
+
+/* ===== hero: плашки направлений с уголками, как у AFFORD (23.11) ===== */
+html .hero .scale.plates{grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:0 var(--pad) clamp(22px,3.4vh,34px)}
+html .hero .scale.plates::before{content:none}
+html .hero .scale.plates .run{visibility:hidden}
+html .hero .scale.plates .tab{--k:18px;position:relative;display:grid;align-content:start;row-gap:5px;min-width:0;padding:clamp(16px,1.4vw,22px) clamp(16px,1.5vw,24px) clamp(18px,1.5vw,24px);border:1px solid rgba(255,255,255,.24);color:#fff;text-align:left;transition:background-color .3s}
+html .hero .scale.plates .tab+.tab{margin-left:-1px}
+html .hero .scale.plates .tab::before{content:"";position:absolute;inset:-1px;pointer-events:none;
+  background-image:linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff);
+  background-size:var(--k) 1px,1px var(--k),var(--k) 1px,1px var(--k),var(--k) 1px,1px var(--k),var(--k) 1px,1px var(--k);
+  background-position:0 0,0 0,100% 0,100% 0,0 100%,0 100%,100% 100%,100% 100%;background-repeat:no-repeat}
+html .hero .scale.plates .tab .k{display:block;font-size:15px;font-weight:400;line-height:1.35;color:rgba(255,255,255,.7);transition:color .3s}
+html .hero .scale.plates .tab .v{display:block;font-size:var(--fs-b);font-weight:500;line-height:1.35;letter-spacing:-.01em;color:#fff}
+html .hero .scale.plates .tab.on{background-color:rgba(255,255,255,.07)}
+html .hero .scale.plates .tab.on .k{color:#fff}
+/* прогресс слайда бежит по верхней кромке активной плашки */
+html .hero .scale.plates .prg{position:absolute;left:-1px;right:-1px;top:-1px;height:1px;background:var(--acc);transform:scaleX(0);transform-origin:left;pointer-events:none}
+html .hero .scale.plates .tab.on .prg{animation:plp 7s linear forwards}
+html .hero .scale.plates:hover .tab.on .prg,html .hero .scale.plates:focus-within .tab.on .prg{animation-play-state:paused}
+@keyframes plp{to{transform:scaleX(1)}}
+@media (max-width:1000px){html .hero .scale.plates{grid-template-columns:repeat(2,minmax(0,1fr))}html .hero .scale.plates .tab+.tab{margin-left:0}html .hero .scale.plates .tab:nth-child(odd){margin-left:-1px}html .hero .scale.plates .tab:nth-child(n+4){margin-top:-1px}}
+@media (max-width:680px){html .hero .scale.plates .tab{--k:14px;padding:12px 12px 14px;row-gap:3px}html .hero .scale.plates .tab span{display:block}html .hero .scale.plates .tab .k,html .hero .scale.plates .tab .v{font-size:var(--fs-s)}}
+@media (prefers-reduced-motion:reduce){html .hero .scale.plates .tab.on .prg{animation:none;transform:scaleX(1)}html .hero .scale.plates .tab::before{transition:none}}
+
+/* «Цех на аутсорсинге»: фото станка, встроенное в тёмную плашку (23.11) */
+html .pc .c5 .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;pointer-events:none}
+html .pc .c5::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(20,22,24,.92) 0%,rgba(20,22,24,0) 26%,rgba(20,22,24,0) 46%,rgba(20,22,24,.78) 70%,#141618 100%),linear-gradient(90deg,rgba(20,22,24,.5) 0%,rgba(20,22,24,0) 18%,rgba(20,22,24,0) 85%,rgba(20,22,24,.5) 100%)}
+html .pc .c5>.t,html .pc .c5>.bot{position:relative;z-index:1}
+html .pc .c5 .bot p{color:#fff}
+
+/* краны: каталог карточек (23.11) */
+.cr .cg{align-self:stretch;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:clamp(28px,3vw,48px);text-align:left}
+.cr .cc{display:flex;flex-direction:column;padding:0 clamp(18px,1.6vw,26px) clamp(20px,1.8vw,28px);background:#F2F3F1;color:var(--ink)}
+.cr .cc .im{aspect-ratio:1.25;margin:0 calc(clamp(18px,1.6vw,26px) * -1);padding:clamp(16px,2vw,32px);overflow:hidden}
+.cr .cc .im img{width:100%;height:100%;object-fit:contain;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.cr .cc:hover .im img{transform:scale(1.05)}
+html .cr .cc h3{margin-bottom:18px;font-size:var(--fs-3);font-weight:500;line-height:1.15;letter-spacing:-.02em}
+.cr .ch{display:flex;flex-wrap:wrap;gap:8px}
+.cr .ch i{font-style:normal;padding:8px 12px;border:1px solid rgba(17,17,17,.12);background:#fff;font-size:var(--fs-s);line-height:1.2;color:#55585A;white-space:nowrap}
+.cr .cf{align-self:stretch;display:flex;justify-content:space-between;align-items:center;gap:24px;margin-top:28px;text-align:left}
+.cr .cf p{max-width:60ch;font-size:var(--fs-b);line-height:1.45;color:#55585A}
+@media (max-width:900px){.cr .cg{grid-template-columns:1fr}.cr .cf{flex-direction:column;align-items:flex-start}}
+
+/* фаски 45° (23.11): ступенька на входе в тёмные блоки и срезанный угол карточек; проекты без среза */
+:root{--fh:clamp(28px,3vw,48px);--fc:18px}
+#stats::before{content:"";position:absolute;left:0;right:0;top:-1px;height:calc(var(--fh) + 1px);background:#fff;z-index:6;pointer-events:none}
+#stats::before{clip-path:polygon(79% 0,100% 0,100% 100%,calc(79% + var(--fh)) 100%)}
+.pc .cd,.cr .cc,.rf .pic,#stats .pl,.eq .pic{clip-path:polygon(0 0,calc(100% - var(--fc)) 0,100% var(--fc),100% 100%,0 100%)}
+
+/* hero: правая колонка = ширина одной плашки, её линия строго над стыком 3-й и 4-й плашек (23.11) */
+@media (min-width:1001px){
+  html .hero .stage{grid-template-columns:minmax(0,3fr) minmax(0,1fr);column-gap:0}
+  html .hero .side{margin-left:-1px;border-left:1px solid rgba(255,255,255,.24)}
+}
+
+/* краны: тёмный блок, чтобы разбить подряд идущие белые секции (23.11) */
+html #cranes{background:#121416;color:#fff;--line:rgba(255,255,255,.14)}
+html #cranes .h2{color:#fff}
+html #cranes .lbl{color:#fff}
+html #cranes .acc{color:#8A8D8B}
+html #cranes::before{content:"";height:calc(var(--fh) + 1px);top:-1px;background:#fff;clip-path:polygon(79% 0,100% 0,100% 100%,calc(79% + var(--fh)) 100%);z-index:6}
+html #cranes .cc{background:#1B1E20;color:#fff}
+html #cranes .ch i{background:transparent;border-color:rgba(255,255,255,.16);color:rgba(255,255,255,.72)}
+html #cranes .cf p{color:rgba(255,255,255,.6)}
+html #cranes .lnk{color:#fff}
+
+/* «О компании»: фото на всю ширину, текст поверх (вариант 06 из about10, 24.11; фото и композиция текста временные) */
+html #about.ab6{position:relative;display:flex;align-items:flex-end;min-height:clamp(620px,56vw,900px);padding:0;overflow:hidden;background:#121416;color:#fff}
+html #about.ab6::before{content:none}
+html #about.ab6 .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(.85) contrast(1.05) brightness(.78)}
+html #about.ab6::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,20,22,.55) 0%,rgba(18,20,22,.1) 30%,rgba(18,20,22,.35) 55%,rgba(18,20,22,.94) 100%);pointer-events:none}
+html #about.ab6>.lbl{position:absolute;z-index:1;top:var(--sec);left:var(--pad);margin:0;color:#fff}
+html #about.ab6 .in{position:relative;z-index:1;width:100%;padding:var(--sec) var(--pad) calc(var(--sec) * .7);display:grid;row-gap:36px}
+html #about.ab6 .h2{max-width:min(100%,60vw);color:#fff}
+html #about.ab6 .acc{color:rgba(255,255,255,.55)}
+html #about.ab6 .tx{display:grid;grid-template-columns:1fr 1fr auto;column-gap:clamp(16px,1.8vw,28px);align-items:end}
+html #about.ab6 .tx p{max-width:50ch;font-size:clamp(17px,1.25vw,19px);line-height:1.5;color:rgba(255,255,255,.82)}
+html #about.ab6 .lnk{color:#fff;white-space:nowrap}
+@media (max-width:900px){html #about.ab6 .tx{grid-template-columns:1fr;row-gap:16px}}
 </style>
 </head>
 <body>
@@ -821,12 +906,12 @@ html .ft .word{color:#fff;position:relative;z-index:1}
     </div>
   </div>
 
-  <div class="scale" id="hScale">
+  <div class="scale plates" id="hScale">
     <i class="run" id="hRun"></i>
-    <button class="tab on" type="button" aria-current="true"><b>01</b><span>Промышленный инжиниринг</span></button>
-    <button class="tab" type="button"><b>02</b><span>Крановое оборудование</span></button>
-    <button class="tab" type="button"><b>03</b><span>Огнеупорные материалы</span></button>
-    <button class="tab" type="button"><b>04</b><span>Металлообработка</span></button>
+    <button class="tab on" type="button" aria-current="true"><i class="prg"></i><span class="k">Промышленный инжиниринг</span><span class="v">КД по&nbsp;образцу, технологический аудит</span></button>
+    <button class="tab" type="button"><i class="prg"></i><span class="k">Крановое оборудование</span><span class="v">До&nbsp;250&nbsp;т, монтаж за&nbsp;10&nbsp;дней</span></button>
+    <button class="tab" type="button"><i class="prg"></i><span class="k">Огнеупорные материалы</span><span class="v">Футеровка для&nbsp;литья алюминия</span></button>
+    <button class="tab" type="button"><i class="prg"></i><span class="k">Металлообработка</span><span class="v">Станки с&nbsp;ЧПУ, серии от&nbsp;5&nbsp;штук</span></button>
   </div>
 </section>
 
@@ -864,7 +949,7 @@ html .ft .word{color:#fff;position:relative;z-index:1}
   <div class="st">
     <img class="hook" src="img/hero-obj/hook-gray.webp" alt="Крюковая подвеска мостового крана" data-a="0" data-b=".34">
     <h2 class="hd h2" data-a=".16" data-b=".36">Ремарт<br>в&nbsp;цифрах</h2>
-    <div class="pl R1 lime" data-a=".36" data-b=".48"><b data-to="1000">1000</b><span>тонн обработанного металла</span></div>
+    <div class="pl R1" data-a=".36" data-b=".48"><b data-to="1000">1000</b><span>тонн обработанного металла</span></div>
     <div class="pl L1" data-a=".44" data-b=".56"><b data-to="15">15</b><span>лет работы</span></div>
     <div class="pl R2" data-a=".52" data-b=".64"><b data-to="250">250</b><span>проектов</span></div>
     <div class="pl L2" data-a=".60" data-b=".72"><b data-to="12">12</b><span>единиц оборудования</span></div>
@@ -873,17 +958,16 @@ html .ft .word{color:#fff;position:relative;z-index:1}
 </section>
 
 <!-- 05. КРАТКО О КОМПАНИИ -->
-<section class="sec w" id="about">
-  <div class="ab">
-    <span class="lbl a">О&nbsp;компании</span>
-    <h2 class="stm h3 rv">Ремарт проектирует и&nbsp;производит для&nbsp;промышленных предприятий <span class="acc">оборудование особого назначения</span></h2>
-    <div class="tx rv">
+<section class="sec ab6" id="about">
+  <img class="bg" src="img/own/pech.jpg" alt="Инженер Ремарта у промышленной печи на объекте" loading="lazy">
+  <span class="lbl a">О&nbsp;компании</span>
+  <div class="in">
+    <h2 class="h2 rv">Ремарт проектирует и&nbsp;производит для&nbsp;промышленных предприятий <span class="acc">оборудование особого назначения</span></h2>
+    <div class="tx">
       <p>Проектируем, изготавливаем, поставляем, монтируем и&nbsp;налаживаем промышленное оборудование особого назначения, а&nbsp;затем обслуживаем его по&nbsp;гарантии.</p>
       <p>Выполняем реверс-инжиниринг и&nbsp;импортозамещение: воссоздаём детали и&nbsp;оборудование, которые больше не&nbsp;поставляются.</p>
+      <a class="lnk" href="#">Подробнее о&nbsp;компании <span>→</span></a>
     </div>
-    <div class="c1"><div class="im"><img src="img/graded/own__korpus-reduktora.jpg" alt="Обработка корпуса редуктора на станке с ЧПУ"></div></div>
-    <div class="c2"><div class="im"><img src="img/graded/own__frezerovanie.jpg" alt="Фрезерование детали пресс-формы на станке с ЧПУ"></div></div>
-    <div class="c3"><div class="im"><img src="img/graded/anilit__teplovye-koltsa.jpg" alt="Огнеупорные тепловые кольца"></div><a class="lnk" href="#">Подробнее о&nbsp;компании <span>→</span></a></div>
   </div>
 </section>
 
@@ -911,22 +995,21 @@ html .ft .word{color:#fff;position:relative;z-index:1}
       <article class="cd c2"><div class="t"><h3>Промышленное оборудование специализированного назначения</h3><span class="bars" aria-label="2 из 5"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></div><p>Разрабатываем и&nbsp;изготавливаем оборудование под производственную задачу заказчика.</p></article>
       <article class="cd c3"><div class="t"><h3>Аналоги импортного оборудования</h3><span class="bars" aria-label="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></div><p>Реверс-инжиниринг по&nbsp;образцу, даже если конструкторской документации нет.</p></article>
       <article class="cd c4"><div class="t"><h3>Пресс-формы и&nbsp;технологическая оснастка</h3><span class="bars" aria-label="4 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></div><p>Изготавливаем детали пресс-форм и&nbsp;оснастку по&nbsp;чертежам заказчика.</p></article>
-      <article class="cd c5"><div class="t"><h3>Цех на&nbsp;аутсорсинге</h3><span class="bars" aria-label="5 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div><div class="bot"><p>Экономия до&nbsp;20% затрат на&nbsp;содержании собственного цеха и&nbsp;штата.</p><a class="lnk" href="#">О&nbsp;производстве <span>→</span></a></div></article>
+      <article class="cd c5"><img class="ph" src="img/graded/cnc-milling-dark2.jpg" alt="Фрезеровка стальной детали на станке с ЧПУ" loading="lazy"><div class="t"><h3>Цех на&nbsp;аутсорсинге</h3><span class="bars" aria-label="5 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div><div class="bot"><p>Экономия до&nbsp;20% затрат на&nbsp;содержании собственного цеха и&nbsp;штата.</p><a class="lnk" href="#">О&nbsp;производстве <span>→</span></a></div></article>
     </div>
   </div>
 </section>
 
 <!-- 07. КРАНОВОЕ ОБОРУДОВАНИЕ -->
-<section class="sec w" id="cranes">
+<section class="sec dk" id="cranes">
   <div class="cr">
     <div class="shead"><div><span class="lbl a">Крановое оборудование</span><h2 class="h2 rv">Грузоподъёмное оборудование <span class="acc">под рабочие нагрузки и&nbsp;территорию предприятия</span></h2></div></div>
-    <img class="ob" src="img/3d/crane.png" alt="Мостовой кран с тележкой и крюком">
-    <div class="row">
-      <div class="it"><h3>Мостовые краны</h3><p class="p">До&nbsp;250&nbsp;т, пролёт до&nbsp;34,5&nbsp;м, режим&nbsp;работы&nbsp;А3–А8.</p></div>
-      <div class="it"><h3>Козловые краны</h3><p class="p">До&nbsp;250&nbsp;т, пролёт до&nbsp;40&nbsp;м, режим&nbsp;работы&nbsp;А4–А7.</p></div>
-      <div class="it"><h3>Консольные краны</h3><p class="p">До&nbsp;100&nbsp;т, вылет до&nbsp;5&nbsp;м, режим&nbsp;работы&nbsp;А2–А5.</p></div>
+    <div class="cg">
+      <a class="cc" href="#"><div class="im"><img src="img/3d/crane.png" alt="Мостовой кран с тележкой и крюком" loading="lazy"></div><h3>Мостовые краны</h3><div class="ch"><i>до&nbsp;250&nbsp;т</i><i>пролёт до&nbsp;34,5&nbsp;м</i><i>режим А3–А8</i><i>срок службы от&nbsp;18&nbsp;лет</i></div></a>
+      <a class="cc" href="#"><div class="im"><img src="img/3d/gantry.png?v=4" alt="Козловой кран" loading="lazy"></div><h3>Козловые краны</h3><div class="ch"><i>до&nbsp;250&nbsp;т</i><i>пролёт до&nbsp;40&nbsp;м</i><i>режим А4–А7</i><i>срок службы от&nbsp;15&nbsp;лет</i></div></a>
+      <a class="cc" href="#"><div class="im"><img src="img/3d/jib.png" alt="Консольный кран" loading="lazy"></div><h3>Консольные краны</h3><div class="ch"><i>до&nbsp;100&nbsp;т</i><i>вылет до&nbsp;5&nbsp;м</i><i>режим А2–А5</i><i>срок службы от&nbsp;12&nbsp;лет</i></div></a>
     </div>
-    <a class="lnk" href="#">Сроки и&nbsp;характеристики <span>→</span></a>
+    <div class="cf"><p>Также кран-балки, краны-пионеры, крановые эстакады, тали и&nbsp;тельферы.</p><a class="lnk" href="#">Все краны и&nbsp;услуги <span>→</span></a></div>
   </div>
 </section>
 
@@ -937,10 +1020,10 @@ html .ft .word{color:#fff;position:relative;z-index:1}
     <a class="lnk" href="#">Все изделия и&nbsp;характеристики <span>→</span></a>
   </div>
   <div class="rf">
-    <div class="it"><div class="top lbl"><span>Кросфидеры</span><i>1300–1500&nbsp;кг/м³</i></div><div class="pic"><img src="img/graded/anilit__krosfider-razlivochnyy-zhelob.jpg" alt="Кросфидер"></div><p>Распределяют расплав по&nbsp;разливочному столу и&nbsp;держат его температуру.</p></div>
-    <div class="it"><div class="top lbl"><span>Сливные втулки</span><i>1800–2000&nbsp;кг/м³</i></div><div class="pic"><img src="img/graded/anilit__slivnye-vtulki2.jpg" alt="Сливные втулки"></div><p>Подают расплав к&nbsp;кристаллизатору и&nbsp;выдерживают нагрузку потока металла.</p></div>
-    <div class="it"><div class="top lbl"><span>Желоба и&nbsp;лотки</span><i>1800–2000&nbsp;кг/м³</i></div><div class="pic"><img src="img/graded/anilit__zhelob-raspredelitelnyy.jpg" alt="Распределительный желоб"></div><p>Прямые, поворотные и&nbsp;распределительные: система литья под задачу.</p></div>
-    <div class="it"><div class="top lbl"><span>Фильтр-боксы</span><i>1800–2000&nbsp;кг/м³</i></div><div class="pic"><img src="img/graded/anilit__filtr-boksy-filtratsionnye-korobki.jpg" alt="Фильтр-бокс"></div><p>Корпус для&nbsp;пенокерамического фильтра в&nbsp;системе фильтрации расплава.</p></div>
+    <div class="it"><div class="top lbl"><span>Кросфидеры</span><i>1300–1500&nbsp;кг/м³</i></div><div class="pic"><img src="img/refractory/krosfider-sq.jpg" alt="Кросфидер"></div><p>Распределяют расплав по&nbsp;разливочному столу и&nbsp;держат его температуру.</p></div>
+    <div class="it"><div class="top lbl"><span>Сливные втулки</span><i>1800–2000&nbsp;кг/м³</i></div><div class="pic"><img src="img/refractory/slivnye-vtulki-sq.jpg" alt="Сливные втулки"></div><p>Подают расплав к&nbsp;кристаллизатору и&nbsp;выдерживают нагрузку потока металла.</p></div>
+    <div class="it"><div class="top lbl"><span>Желоба и&nbsp;лотки</span><i>1800–2000&nbsp;кг/м³</i></div><div class="pic"><img src="img/refractory/zheloba-sq.jpg" alt="Распределительный желоб"></div><p>Прямые, поворотные и&nbsp;распределительные: система литья под задачу.</p></div>
+    <div class="it"><div class="top lbl"><span>Фильтр-боксы</span><i>1800–2000&nbsp;кг/м³</i></div><div class="pic"><img src="img/refractory/filtr-boks-sq.jpg" alt="Фильтр-бокс"></div><p>Корпус для&nbsp;пенокерамического фильтра в&nbsp;системе фильтрации расплава.</p></div>
   </div>
 </section>
 
@@ -1184,26 +1267,36 @@ new Swiper('.cfg .cf', {
   coverflowEffect: { rotate: 40, stretch: 0, depth: 100, modifier: 1, slideShadows: true },
   autoplay: { delay: 1500, disableOnInteraction: true },
 });
-/* линейка: деления «волной» вокруг текущего кадра, метка плавно переезжает */
+/* шкала: неподвижные деления как на мерительной линейке, лаймовый бегунок едет по кадрам;
+   после последнего кадра уходит за правый край и незаметно возвращается слева */
 (() => {
   const rul = document.querySelector('.cfg .rul');
   const sw = document.querySelector('.cfg .cf').swiper, n = document.querySelectorAll('.cfg .swiper-slide:not(.swiper-slide-duplicate)').length;
-  const N = 120, ticks = [];
-  for (let k = 0; k < N; k++) { const t = document.createElement('i'); t.style.left = (k / (N - 1) * 100) + '%'; rul.appendChild(t); ticks.push(t); }
+  const N = 121, ticks = [];
+  for (let k = 0; k < N; k++) {
+    const t = document.createElement('i');
+    t.className = k % 10 === 0 ? 'l' : k % 5 === 0 ? 'm' : '';
+    t.style.left = (k / (N - 1) * 100) + '%'; rul.appendChild(t); ticks.push(t);
+  }
   const mk = document.createElement('s'); mk.className = 'mk'; rul.appendChild(mk);
-  let cur = 0, target = 0;
-  const pad = .03;                                   // метка не упирается в края линейки
-  const setTarget = () => { target = pad + (1 - 2 * pad) * sw.realIndex / (n - 1); };
-  sw.on('slideChange', setTarget); setTarget(); cur = target;
+  const pad = .03, out = .06, pos = i => pad + (1 - 2 * pad) * i / (n - 1);
+  let prev = sw.realIndex, cur = pos(prev), target = cur, wrap = 0;
+  sw.on('slideChange', () => {
+    const i = sw.realIndex;
+    if (prev === n - 1 && i === 0) { wrap = 1; target = 1 + out; }        // вперёд по кругу: уходим вправо
+    else if (prev === 0 && i === n - 1) { wrap = -1; target = -out; }     // назад по кругу: уходим влево
+    else { wrap = 0; target = pos(i); }
+    prev = i;
+  });
+  let lit = -1;
   const draw = () => {
     cur += (target - cur) * .028;
-    const c = cur * (N - 1);
-    ticks.forEach((t, k) => {
-      const d = Math.abs(k - c), w = Math.exp(-(d * d) / 55);
-      t.style.height = ((k % 5 === 0 ? 9 : 5) + 22 * w).toFixed(1) + 'px';
-      t.style.opacity = (.32 + .5 * w).toFixed(3);
-    });
+    if (wrap === 1 && cur > 1 + out * .8) { cur = -out; target = pos(0); wrap = 0; }
+    if (wrap === -1 && cur < -out * .8) { cur = 1 + out; target = pos(n - 1); wrap = 0; }
     mk.style.left = (cur * 100) + '%';
+    mk.style.opacity = Math.max(0, Math.min(1, Math.min(cur, 1 - cur) / .03 + .2)).toFixed(3);
+    const c = Math.round(Math.max(0, Math.min(1, cur)) * (N - 1));
+    if (c !== lit) { ticks.forEach((t, k) => t.classList.toggle('on', k <= c)); lit = c; }
     requestAnimationFrame(draw);
   };
   draw();
