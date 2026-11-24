@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="img/favicon.svg">
 <title>Ремарт - инжиниринг полного цикла</title>
 <meta name="description" content="Проектируем и производим промышленное оборудование особого назначения: промышленный инжиниринг, крановое оборудование, огнеупорные материалы, металлообработка.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -860,6 +861,10 @@ html #about.ab6 .lnk{color:#fff;white-space:nowrap;justify-self:start;align-self
   html .ft .cols>div:nth-child(1){grid-column:1/-1!important;padding-bottom:28px;border-bottom:1px solid var(--lineW)!important}
   html .ft .legal{align-items:center}
 }
+
+/* финальная проверка 24.11: острые углы у плашек партнёров; зона нажатия ссылок на тач-экранах не меньше 44px */
+html .mq li{border-radius:0}
+@media (hover:none) and (pointer:coarse){html .lnk{position:relative}html .lnk::after{content:"";position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%)}}
 </style>
 </head>
 <body>
