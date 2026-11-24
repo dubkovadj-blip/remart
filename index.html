@@ -10,7 +10,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..500&display=swap" rel="stylesheet">
 <script>const c = new URLSearchParams(location.search).get('c'); if (c === 'dark') document.documentElement.dataset.c = c; if (c === 'blue') delete document.documentElement.dataset.c;</script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.css">
 <style>
 /* Основной акцент сайта: фирменный салатовый #B9CF3D (data-c="lime" на html). ?c=blue показывает прежний синий, ?c=dark графит. */
 :root{
@@ -96,7 +95,7 @@ body{position:relative}
 .hdr.glass{background:rgba(30,32,34,.5)}
 .hdr.solid{color:var(--ink);background:rgba(244,244,242,.9);box-shadow:0 0 0 1px rgba(17,17,17,.06)}
 .hdr .logo{display:flex;align-items:center;flex:none;margin-right:auto}
-.hdr .logo img{height:57px;width:auto}
+.hdr .logo img{height:48px;width:auto}
 .hdr nav{display:flex;align-items:center;gap:2px}
 .hdr nav a{display:flex;align-items:center;height:calc(var(--ih) - 16px);padding:0 20px;border-radius:4px;font-size:16px;font-weight:400;line-height:1.15;white-space:nowrap}
 .hdr .tel{display:flex;align-items:center;height:calc(var(--ih) - 16px);margin-left:10px;padding:0 20px;background:var(--acc);color:var(--ink);font-size:15px;font-weight:500;white-space:nowrap}
@@ -109,9 +108,9 @@ body{position:relative}
 .mnav a{display:block;padding:14px 0;border-bottom:1px solid var(--line);font-size:17px;font-weight:500;letter-spacing:-.02em}
 .mnav .btn{display:flex;margin-top:18px;border:0;color:#fff}
 @media (max-width:1420px){.hdr nav a{padding:0 14px;font-size:15px}.hdr .tel{padding:0 16px;font-size:14px}}
-@media (max-width:1100px){.hdr nav a{padding:0 10px;font-size:14px}.hdr .logo img{height:51px}}
+@media (max-width:1100px){.hdr nav a{padding:0 10px;font-size:14px}.hdr .logo img{height:44px}}
 @media (max-width:900px){.hdr nav{display:none}.burger{display:flex}}
-@media (max-width:680px){:root{--hh:68px;--ht:10px}.hdr{left:10px;right:10px;padding:0 6px 0 14px}.hdr .logo img{height:48px}.hdr .tel{height:40px;padding:0 12px;font-size:13px}.hdr .tel svg{display:none}.burger{width:40px;height:40px}.mnav{left:10px;right:10px}}
+@media (max-width:680px){:root{--hh:68px;--ht:10px}.hdr{left:10px;right:10px;padding:0 6px 0 14px}.hdr .logo img{height:40px}.hdr .tel{height:40px;padding:0 12px;font-size:13px}.hdr .tel svg{display:none}.burger{width:40px;height:40px}.mnav{left:10px;right:10px}}
 
 /* =========================================================
    01. ПЕРВЫЙ ЭКРАН
@@ -831,8 +830,8 @@ html #cranes .lnk{color:#fff}
 /* «О компании»: фото на всю ширину, текст поверх (вариант 06 из about10, 24.11; фото и композиция текста временные) */
 html #about.ab6{position:relative;display:flex;align-items:flex-end;min-height:clamp(620px,56vw,900px);padding:0;overflow:hidden;background:#121416;color:#fff}
 html #about.ab6::before{content:none}
-html #about.ab6 .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(.85) contrast(1.05) brightness(.78)}
-html #about.ab6::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,20,22,.55) 0%,rgba(18,20,22,.1) 30%,rgba(18,20,22,.35) 55%,rgba(18,20,22,.94) 100%);pointer-events:none}
+html #about.ab6 .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 40%}
+html #about.ab6::after{content:none}
 html #about.ab6>.lbl{position:absolute;z-index:1;top:var(--sec);left:var(--pad);margin:0;color:#fff}
 html #about.ab6 .in{position:relative;z-index:1;width:100%;padding:var(--sec) var(--pad) calc(var(--sec) * .7);display:grid;row-gap:36px}
 html #about.ab6 .h2{max-width:min(100%,60vw);color:#fff}
@@ -840,7 +839,27 @@ html #about.ab6 .acc{color:rgba(255,255,255,.55)}
 html #about.ab6 .tx{display:grid;grid-template-columns:1fr 1fr auto;column-gap:clamp(16px,1.8vw,28px);align-items:end}
 html #about.ab6 .tx p{max-width:50ch;font-size:clamp(17px,1.25vw,19px);line-height:1.5;color:rgba(255,255,255,.82)}
 html #about.ab6 .lnk{color:#fff;white-space:nowrap}
-@media (max-width:900px){html #about.ab6 .tx{grid-template-columns:1fr;row-gap:16px}}
+@media (max-width:900px){html #about.ab6{flex-direction:column;align-items:stretch;justify-content:flex-end}html #about.ab6>.lbl{position:relative;top:auto;left:auto;margin:var(--sec) var(--pad) auto}html #about.ab6 .in{padding-top:48px}html #about.ab6 .tx{grid-template-columns:1fr;row-gap:16px}}
+
+/* галерея «Цех и проекты»: бесконечная лента (вариант 01 из gallery10, 24.11); кадры в своих пропорциях, без обрезки */
+.cfg .rb{overflow:hidden}
+.cfg .rb-t{display:flex;gap:clamp(12px,1.4vw,20px);width:max-content;animation:rb 90s linear infinite}
+.cfg .rb:hover .rb-t{animation-play-state:paused}
+.cfg .rb figure{flex:none;margin:0}
+.cfg .rb .im{height:clamp(260px,24vw,400px);overflow:hidden;background:#1b1d1e}
+.cfg .rb img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.cfg .rb figure:hover img{transform:scale(1.04)}
+.cfg .rb figcaption{margin-top:12px;max-width:34ch;font-size:13px;line-height:1.4;color:rgba(255,255,255,.55)}
+@keyframes rb{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.cfg .rb{overflow-x:auto}.cfg .rb-t{animation:none}}
+
+/* подвал на планшете: слоган во всю ширину, ниже две ровные колонки (Компания | Направления, Реквизиты | Контакты) (24.11) */
+@media (min-width:681px) and (max-width:900px){
+  html .ft .cols{grid-template-columns:1fr 1fr;column-gap:clamp(24px,4vw,40px);row-gap:36px}
+  html .ft .cols>div{grid-column:auto!important;margin-bottom:0!important}
+  html .ft .cols>div:nth-child(1){grid-column:1/-1!important;padding-bottom:28px;border-bottom:1px solid var(--lineW)!important}
+  html .ft .legal{align-items:center}
+}
 </style>
 </head>
 <body>
@@ -959,7 +978,7 @@ html #about.ab6 .lnk{color:#fff;white-space:nowrap}
 
 <!-- 05. КРАТКО О КОМПАНИИ -->
 <section class="sec ab6" id="about">
-  <img class="bg" src="img/own/pech.jpg" alt="Инженер Ремарта у промышленной печи на объекте" loading="lazy">
+  <img class="bg" src="img/graded/about-workshop.jpg" alt="Цех металлообработки: деталь на столе станка с ЧПУ" loading="lazy">
   <span class="lbl a">О&nbsp;компании</span>
   <div class="in">
     <h2 class="h2 rv">Ремарт проектирует и&nbsp;производит для&nbsp;промышленных предприятий <span class="acc">оборудование особого назначения</span></h2>
@@ -1029,8 +1048,7 @@ html #about.ab6 .lnk{color:#fff;white-space:nowrap}
 
 <!-- ГАЛЕРЕЯ: карусель с поворотом соседних кадров (как у BAYSAR) -->
 <section class="cfg dk nostk" aria-label="Цех и проекты">
-  <div class="cf-wrap"><div class="swiper cf"><div class="swiper-wrapper"><div class="swiper-slide"><img src="img/graded/projects__bystrinskoe.jpg" alt="3D-сканирование детали горного оборудования" loading="lazy"></div><div class="swiper-slide"><img src="img/graded/own__korpus-reduktora.jpg" alt="Обработка корпуса редуктора на станке с ЧПУ" loading="lazy"></div><div class="swiper-slide"><img src="img/graded/projects__osnastka.jpg" alt="Оснастка на роботе-манипуляторе" loading="lazy"></div><div class="swiper-slide"><img src="img/graded/own__frezerovanie.jpg" alt="Фрезерование детали пресс-формы" loading="lazy"></div><div class="swiper-slide"><img src="img/graded/projects__konvejer.jpg" alt="Конвейер транспортировки листового металла" loading="lazy"></div><div class="swiper-slide"><img src="img/graded/anilit__teplovye-koltsa.jpg" alt="Огнеупорные тепловые кольца" loading="lazy"></div></div></div></div>
-  <div class="cf-meter"><div class="rul" aria-hidden="true"></div></div>
+  <div class="rb"><div class="rb-t"><figure><div class="im" style="aspect-ratio:1600/1236"><img src="img/graded/projects__bystrinskoe.jpg" alt="3D-сканирование детали горного оборудования" loading="lazy"></div><figcaption>3D-сканирование детали горного оборудования</figcaption></figure><figure><div class="im" style="aspect-ratio:1600/1201"><img src="img/graded/old__korpus-bloka.jpg" alt="Корпус и крышка электронного блока управления" loading="lazy"></div><figcaption>Корпус и крышка электронного блока управления</figcaption></figure><figure><div class="im" style="aspect-ratio:1600/1200"><img src="img/graded/own__korpus-reduktora.jpg" alt="Обработка корпуса редуктора на станке с ЧПУ" loading="lazy"></div><figcaption>Обработка корпуса редуктора на станке с ЧПУ</figcaption></figure><figure><div class="im" style="aspect-ratio:1600/1200"><img src="img/graded/old__stupica.jpg" alt="Ступица трёхлопастного пропеллера" loading="lazy"></div><figcaption>Ступица трёхлопастного пропеллера</figcaption></figure><figure><div class="im" style="aspect-ratio:1600/1200"><img src="img/graded/projects__osnastka.jpg" alt="Оснастка на роботе-манипуляторе" loading="lazy"></div><figcaption>Оснастка на роботе-манипуляторе</figcaption></figure><figure><div class="im" style="aspect-ratio:1600/1200"><img src="img/graded/old__nasos-dvs.jpg" alt="Крепление масляного насоса ДВС на станке с ЧПУ" loading="lazy"></div><figcaption>Крепление масляного насоса ДВС на станке с ЧПУ</figcaption></figure><figure><div class="im" style="aspect-ratio:1600/1122"><img src="img/graded/own__frezerovanie.jpg" alt="Фрезерование детали пресс-формы" loading="lazy"></div><figcaption>Фрезерование детали пресс-формы</figcaption></figure><figure><div class="im" style="aspect-ratio:1600/1200"><img src="img/graded/old__zakhvat-diskov.jpg" alt="Механический захват для литых алюминиевых дисков" loading="lazy"></div><figcaption>Механический захват для литых алюминиевых дисков</figcaption></figure><figure><div class="im" style="aspect-ratio:1600/1200"><img src="img/graded/projects__konvejer.jpg" alt="Конвейер транспортировки листового металла" loading="lazy"></div><figcaption>Конвейер транспортировки листового металла</figcaption></figure><figure aria-hidden="true"><div class="im" style="aspect-ratio:1600/1236"><img src="img/graded/projects__bystrinskoe.jpg" alt="" loading="lazy"></div><figcaption>3D-сканирование детали горного оборудования</figcaption></figure><figure aria-hidden="true"><div class="im" style="aspect-ratio:1600/1201"><img src="img/graded/old__korpus-bloka.jpg" alt="" loading="lazy"></div><figcaption>Корпус и крышка электронного блока управления</figcaption></figure><figure aria-hidden="true"><div class="im" style="aspect-ratio:1600/1200"><img src="img/graded/own__korpus-reduktora.jpg" alt="" loading="lazy"></div><figcaption>Обработка корпуса редуктора на станке с ЧПУ</figcaption></figure><figure aria-hidden="true"><div class="im" style="aspect-ratio:1600/1200"><img src="img/graded/old__stupica.jpg" alt="" loading="lazy"></div><figcaption>Ступица трёхлопастного пропеллера</figcaption></figure><figure aria-hidden="true"><div class="im" style="aspect-ratio:1600/1200"><img src="img/graded/projects__osnastka.jpg" alt="" loading="lazy"></div><figcaption>Оснастка на роботе-манипуляторе</figcaption></figure><figure aria-hidden="true"><div class="im" style="aspect-ratio:1600/1200"><img src="img/graded/old__nasos-dvs.jpg" alt="" loading="lazy"></div><figcaption>Крепление масляного насоса ДВС на станке с ЧПУ</figcaption></figure><figure aria-hidden="true"><div class="im" style="aspect-ratio:1600/1122"><img src="img/graded/own__frezerovanie.jpg" alt="" loading="lazy"></div><figcaption>Фрезерование детали пресс-формы</figcaption></figure><figure aria-hidden="true"><div class="im" style="aspect-ratio:1600/1200"><img src="img/graded/old__zakhvat-diskov.jpg" alt="" loading="lazy"></div><figcaption>Механический захват для литых алюминиевых дисков</figcaption></figure><figure aria-hidden="true"><div class="im" style="aspect-ratio:1600/1200"><img src="img/graded/projects__konvejer.jpg" alt="" loading="lazy"></div><figcaption>Конвейер транспортировки листового металла</figcaption></figure></div></div>
 </section>
 
 <!-- 09. ПАРТНЁРЫ -->
@@ -1259,48 +1277,6 @@ if (!reduce) {
 }
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.js"></script>
-<script>
-/* галерея: те же настройки, что на референсе */
-new Swiper('.cfg .cf', {
-  effect: 'coverflow', grabCursor: true, centeredSlides: true, slidesPerView: 'auto', loop: true, speed: 300,
-  coverflowEffect: { rotate: 40, stretch: 0, depth: 100, modifier: 1, slideShadows: true },
-  autoplay: { delay: 1500, disableOnInteraction: true },
-});
-/* шкала: неподвижные деления как на мерительной линейке, лаймовый бегунок едет по кадрам;
-   после последнего кадра уходит за правый край и незаметно возвращается слева */
-(() => {
-  const rul = document.querySelector('.cfg .rul');
-  const sw = document.querySelector('.cfg .cf').swiper, n = document.querySelectorAll('.cfg .swiper-slide:not(.swiper-slide-duplicate)').length;
-  const N = 121, ticks = [];
-  for (let k = 0; k < N; k++) {
-    const t = document.createElement('i');
-    t.className = k % 10 === 0 ? 'l' : k % 5 === 0 ? 'm' : '';
-    t.style.left = (k / (N - 1) * 100) + '%'; rul.appendChild(t); ticks.push(t);
-  }
-  const mk = document.createElement('s'); mk.className = 'mk'; rul.appendChild(mk);
-  const pad = .03, out = .06, pos = i => pad + (1 - 2 * pad) * i / (n - 1);
-  let prev = sw.realIndex, cur = pos(prev), target = cur, wrap = 0;
-  sw.on('slideChange', () => {
-    const i = sw.realIndex;
-    if (prev === n - 1 && i === 0) { wrap = 1; target = 1 + out; }        // вперёд по кругу: уходим вправо
-    else if (prev === 0 && i === n - 1) { wrap = -1; target = -out; }     // назад по кругу: уходим влево
-    else { wrap = 0; target = pos(i); }
-    prev = i;
-  });
-  let lit = -1;
-  const draw = () => {
-    cur += (target - cur) * .028;
-    if (wrap === 1 && cur > 1 + out * .8) { cur = -out; target = pos(0); wrap = 0; }
-    if (wrap === -1 && cur < -out * .8) { cur = 1 + out; target = pos(n - 1); wrap = 0; }
-    mk.style.left = (cur * 100) + '%';
-    mk.style.opacity = Math.max(0, Math.min(1, Math.min(cur, 1 - cur) / .03 + .2)).toFixed(3);
-    const c = Math.round(Math.max(0, Math.min(1, cur)) * (N - 1));
-    if (c !== lit) { ticks.forEach((t, k) => t.classList.toggle('on', k <= c)); lit = c; }
-    requestAnimationFrame(draw);
-  };
-  draw();
-})();
-</script>
+
 </body>
 </html>
