@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru" data-c="lime">
 <head>
-<meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
 <title>Ремарт - инжиниринг полного цикла</title>
@@ -782,6 +782,9 @@ html .hero .scale.plates .prg{position:absolute;left:-1px;right:-1px;top:-1px;he
 html .hero .scale.plates .tab.on .prg{animation:plp 7s linear forwards}
 html .hero .scale.plates:hover .tab.on .prg,html .hero .scale.plates:focus-within .tab.on .prg{animation-play-state:paused}
 @keyframes plp{to{transform:scaleX(1)}}
+/* 25.11: одно видео на 4 направления (по 7 с); слайды и полоска идут по времени видео */
+html .hero.vs .scale .run{animation:none}
+html .hero.vs .scale.plates .tab.on .prg{animation:none;transform:scaleX(var(--pp,0))}
 @media (max-width:1000px){html .hero .scale.plates{grid-template-columns:repeat(2,minmax(0,1fr))}html .hero .scale.plates .tab+.tab{margin-left:0}html .hero .scale.plates .tab:nth-child(odd){margin-left:-1px}html .hero .scale.plates .tab:nth-child(n+4){margin-top:-1px}}
 @media (max-width:680px){html .hero .scale.plates .tab{--k:14px;padding:12px 12px 14px;row-gap:3px}html .hero .scale.plates .tab span{display:block}html .hero .scale.plates .tab .k,html .hero .scale.plates .tab .v{font-size:var(--fs-s)}}
 @media (prefers-reduced-motion:reduce){html .hero .scale.plates .tab.on .prg{animation:none;transform:scaleX(1)}html .hero .scale.plates .tab::before{transition:none}}
@@ -903,7 +906,7 @@ html .cfg{padding-bottom:0}
 
 <!-- 01. ПЕРВЫЙ ЭКРАН: слайдер четырёх направлений, телефон и кнопка звонка в шапке -->
 <section class="hero dk" id="hero">
-  <video src="img/reel.mp4" muted loop playsinline autoplay preload="auto"></video>
+  <video id="hVid" src="img/hero-reel.mp4" muted loop playsinline autoplay preload="auto"></video>
 
   <div class="stage">
     <div class="stack">
@@ -1183,7 +1186,23 @@ function go(i) {
   run.style.animation = 'none'; void run.offsetWidth; run.style.animation = '';
 }
 run.addEventListener('animationend', () => go(hi + 1));
-tabs.forEach((b, k) => b.addEventListener('click', () => go(k)));
+/* 25.11: видео hero-reel.mp4 = 4 отрезка по 7 с; если оно играет, слайд и полоска берутся из его времени, иначе работает таймер линейки */
+const hv = $('#hVid'), hEl = hv.closest('.hero'), SEG = 7;
+let vs = false;
+function vUpd() {
+  const t = hv.currentTime % (SEG * hs.length), k = Math.min(hs.length - 1, Math.floor(t / SEG));
+  if (k !== hi) go(k);
+  hEl.style.setProperty('--pp', ((t - k * SEG) / SEG).toFixed(4));
+}
+const vTick = () => { vUpd(); requestAnimationFrame(vTick); };
+const vStart = () => { if (vs) return; vs = true; hEl.classList.add('vs'); vUpd(); requestAnimationFrame(vTick); };
+hv.addEventListener('playing', vStart);
+hv.addEventListener('timeupdate', () => { if (!hv.paused) vStart(); if (vs) vUpd(); });
+if (!hv.paused && hv.readyState > 2) vStart();
+tabs.forEach((b, k) => b.addEventListener('click', () => { if (vs && hv.seekable.length) hv.currentTime = k * SEG + .6; go(k); }));
+const hScale = $('#hScale');
+hScale.addEventListener('mouseenter', () => { if (vs && hoverable.matches) hv.pause(); });
+hScale.addEventListener('mouseleave', () => { if (vs && hoverable.matches) hv.play(); });
 
 
 /* производство: предмет стоит неподвижно, поверх проезжают плашки */
