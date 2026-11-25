@@ -146,7 +146,7 @@ body{position:relative}
     repeating-linear-gradient(90deg,var(--c) 0 1px,transparent 1px 12px) top left/100% 6px no-repeat,
     repeating-linear-gradient(90deg,var(--c) 0 1px,transparent 1px 60px) top left/100% 13px no-repeat}
 .hero .scale::before{--c:var(--t)}
-.hero .scale .run{--c:var(--f);clip-path:inset(0 calc(75% - var(--i,0) * 25%) 0 calc(var(--i,0) * 25%));animation:measure 6s linear forwards}
+.hero .scale .run{--c:var(--f);clip-path:inset(0 calc(75% - var(--i,0) * 25%) 0 calc(var(--i,0) * 25%));animation:measure 4s linear forwards}
 @keyframes measure{from{clip-path:inset(0 calc(100% - var(--i,0) * 25%) 0 calc(var(--i,0) * 25%))}}
 .hero .scale:hover .run,.hero .scale:focus-within .run{animation-play-state:paused}
 .hero .tab{display:flex;align-items:baseline;gap:14px;padding:30px 16px clamp(22px,3.4vh,34px) 0;text-align:left;font-size:clamp(14px,1.08vw,17px);font-weight:500;letter-spacing:-.01em;line-height:1.25;color:rgba(255,255,255,.72);transition:color .25s}
@@ -779,10 +779,10 @@ html .hero .scale.plates .tab.on{background-color:rgba(255,255,255,.07)}
 html .hero .scale.plates .tab.on .k{color:#fff}
 /* прогресс слайда бежит по верхней кромке активной плашки */
 html .hero .scale.plates .prg{position:absolute;left:-1px;right:-1px;top:-1px;height:1px;background:var(--acc);transform:scaleX(0);transform-origin:left;pointer-events:none}
-html .hero .scale.plates .tab.on .prg{animation:plp 6s linear forwards}
+html .hero .scale.plates .tab.on .prg{animation:plp 4s linear forwards}
 html .hero .scale.plates:hover .tab.on .prg,html .hero .scale.plates:focus-within .tab.on .prg{animation-play-state:paused}
 @keyframes plp{to{transform:scaleX(1)}}
-/* 25.11: одно видео на 4 направления (по 6 с); слайды и полоска идут по времени видео */
+/* 25.11: одно видео на 4 направления (по 4 с); слайды и полоска идут по времени видео */
 html .hero.vs .scale .run{animation:none}
 html .hero.vs .scale.plates .tab.on .prg{animation:none;transform:scaleX(var(--pp,0))}
 @media (max-width:1000px){html .hero .scale.plates{grid-template-columns:repeat(2,minmax(0,1fr))}html .hero .scale.plates .tab+.tab{margin-left:0}html .hero .scale.plates .tab:nth-child(odd){margin-left:-1px}html .hero .scale.plates .tab:nth-child(n+4){margin-top:-1px}}
@@ -906,7 +906,7 @@ html .cfg{padding-bottom:0}
 
 <!-- 01. ПЕРВЫЙ ЭКРАН: слайдер четырёх направлений, телефон и кнопка звонка в шапке -->
 <section class="hero dk" id="hero">
-  <video id="hVid" src="img/hero-reel.mp4?v=3" muted loop playsinline autoplay preload="auto"></video>
+  <video id="hVid" src="img/hero-reel.mp4?v=4" muted loop playsinline autoplay preload="auto"></video>
 
   <div class="stage">
     <div class="stack">
@@ -1186,8 +1186,8 @@ function go(i) {
   run.style.animation = 'none'; void run.offsetWidth; run.style.animation = '';
 }
 run.addEventListener('animationend', () => go(hi + 1));
-/* 25.11: видео hero-reel.mp4 = 4 отрезка по 6 с, каждое видео проходит один раз без повтора; если оно играет, слайд и полоска берутся из его времени, иначе работает таймер линейки */
-const hv = $('#hVid'), hEl = hv.closest('.hero'), SEG = 6;
+/* 25.11: видео hero-reel.mp4 = 4 отрезка по 4 с, каждое видео проходит один раз без повтора; если оно играет, слайд и полоска берутся из его времени, иначе работает таймер линейки */
+const hv = $('#hVid'), hEl = hv.closest('.hero'), SEG = 4;
 let vs = false;
 function vUpd() {
   const t = hv.currentTime % (SEG * hs.length), k = Math.min(hs.length - 1, Math.floor(t / SEG));
