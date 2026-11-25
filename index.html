@@ -452,8 +452,9 @@ html[data-c="lime"] .fg .lbl.a,.fg .head .lbl.a{color:#fff}
 /* =========================================================
    ПЕРВЫЙ ЭКРАН: подпись сверху, крупный заголовок снизу, справа колонка с линией
    ========================================================= */
-.hero video{filter:saturate(.6) brightness(.72)}
-.hero::after{background:linear-gradient(180deg,rgba(8,9,10,.7) 0%,rgba(8,9,10,.5) 14%,rgba(8,9,10,.46) 44%,rgba(8,9,10,.82) 72%,rgba(8,9,10,.96) 100%)}
+/* 25.11: затемнение только там, где текст (слева, снизу, под шапкой); справа объект видео читается */
+.hero video{filter:saturate(.6) brightness(.88)}
+.hero::after{background:linear-gradient(180deg,rgba(8,9,10,.6) 0%,rgba(8,9,10,.22) 14%,rgba(8,9,10,0) 30%,rgba(8,9,10,.12) 50%,rgba(8,9,10,.62) 72%,rgba(8,9,10,.94) 100%),linear-gradient(90deg,rgba(8,9,10,.62) 0%,rgba(8,9,10,.42) 35%,rgba(8,9,10,.1) 62%,rgba(8,9,10,.1) 100%)}
 .hero .stage{grid-template-columns:minmax(0,1fr) clamp(280px,24vw,420px);column-gap:clamp(24px,3vw,56px);align-items:stretch;height:clamp(250px,36vh,410px);margin-bottom:clamp(24px,4vh,44px)}
 .hero .hs{display:flex;flex-direction:column;justify-content:space-between;min-width:0}
 .hero .hs .lbl{display:flex;align-items:center;gap:10px;margin:0;color:rgba(255,255,255,.84)}
@@ -906,7 +907,7 @@ html .cfg{padding-bottom:0}
 
 <!-- 01. ПЕРВЫЙ ЭКРАН: слайдер четырёх направлений, телефон и кнопка звонка в шапке -->
 <section class="hero dk" id="hero">
-  <video id="hVid" src="img/hero-reel.mp4?v=6" muted loop playsinline autoplay preload="auto"></video>
+  <video id="hVid" src="img/hero-reel.mp4?v=7" muted loop playsinline autoplay preload="auto"></video>
 
   <div class="stage">
     <div class="stack">
@@ -1199,7 +1200,7 @@ const vStart = () => { if (vs) return; vs = true; hEl.classList.add('vs'); vUpd(
 hv.addEventListener('playing', vStart);
 hv.addEventListener('timeupdate', () => { if (!hv.paused) vStart(); if (vs) vUpd(); });
 if (!hv.paused && hv.readyState > 2) vStart();
-tabs.forEach((b, k) => b.addEventListener('click', () => { if (vs && hv.seekable.length) hv.currentTime = k * SEG + .5; go(k); }));
+tabs.forEach((b, k) => b.addEventListener('click', () => { if (vs && hv.seekable.length) hv.currentTime = k * SEG + .3; go(k); }));
 const hScale = $('#hScale');
 hScale.addEventListener('mouseenter', () => { if (vs && hoverable.matches) hv.pause(); });
 hScale.addEventListener('mouseleave', () => { if (vs && hoverable.matches) hv.play(); });
